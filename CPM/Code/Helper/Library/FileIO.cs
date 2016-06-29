@@ -34,7 +34,7 @@ namespace CPM.Helper
 
         #region Upload
 
-        public static result UploadAndSave(HttpPostedFileBase upFile, int ClaimID, string ClaimGUID, int? DetailId)
+        public static result UploadAndSave(HttpPostedFileBase upFile, int ClaimID, string ClaimGUID,ref string OtherIssue, int? DetailId)
         {
             #region Init variables
 
@@ -77,7 +77,11 @@ namespace CPM.Helper
                 //reset original filename
 
             }
-            catch { return result.fileUploadIssue; }
+            catch (Exception ex) 
+            { 
+                OtherIssue = ex.Message + " " + (ex.InnerException??new Exception()).Message; 
+                return result.fileUploadIssue; 
+            }
 
             return result.successful;
         }
