@@ -1,0 +1,14 @@
+﻿@using CPM.Helper
+@* Small place holder diaplayed along with the top header *@
+@{
+    string LogOnHTML = "";    
+    string template = "Welcome {0} ({1} of {2}) ";
+ }
+    @if(_SessionUsr.RoleID == -1){
+        <span>[ @Html.ActionLink("Log On", "Login", "Common") ]</span>
+    }
+    else
+    {
+        LogOnHTML = string.Format(template, _SessionUsr.UserName, _SessionUsr.RoleName, _SessionUsr.OrgName);
+        <span>@LogOnHTML [ <span class="ui-icon ui-icon-power" style="display:inline-block;vertical-align:bottom;"></span>@Html.ActionLink("Log Off", "Login", "Common", new { from = "logoff"}, new { @style="display:inline" }) ] </span>
+    }

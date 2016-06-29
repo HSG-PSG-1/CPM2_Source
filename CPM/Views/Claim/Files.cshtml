@@ -1,0 +1,330 @@
+﻿@using CPM.Helper
+@{ 
+    bool isArchived = (bool)ViewData["Archived"];
+    string maxFileSizMB = "(" + Config.MaxFileSizMB + " MB max)";
+}
+<div id="divFiles">
+    <table style="width: 100%" border="0">
+        @if (!isArchived)
+        {
+            <tr>
+                <td align="right">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                        @* HT : Make sure this is outside the ajaxForm!*@
+                        <tr>
+                            <td nowrap="nowrap">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td align="left" nowrap="nowrap">
+                                <div id="divMultiFileUpload">
+                                    <input type="file" name="multiFileupload" id="multiFileupload" style="display: inline;
+                                        text-align: right" />
+                                    <div id="uploaded" style1="display: inline; text-align: right">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                @* File upload solution with AJAX http://stackoverflow.com/questions/166221/how-can-i-upload-files-asynchronously-with-jquery*@
+                <td align="center">
+                    @using (Html.BeginForm("FilePostKO", "Claim", new { ClaimGUID = ViewData["ClaimGUID"] }, FormMethod.Post,
+        new { id = "frmFiles", enctype = "multipart/form-data", style = "display:inline" }))
+                    {
+                        @*<div id="fileOprMsg" style="text-align: center; display: inline">&nbsp;</div>*@
+                        <table cellpadding="2" cellspacing="2" style="width: 100%" border="0" data-bind="with: fileToAdd">
+                            <tr>
+                                <td colspan="4" align="center">
+                                    <div style="display: none">
+                                        <input data-bind="value:_Added" id="_Added" name="_Added" />
+                                        ID:
+                                        <input id="ID" name="ID" data-bind="value:ID" /><br />
+                                        Claim ID:
+                                        <input id="ClaimID" name="ClaimID" data-bind="value:ClaimID" />
+                                        ClaimGUID:<input id="ClaimGUID" name="ClaimGUID" data-bind="value:ClaimGUID" /><br />
+                                        UploadedOn:<input type="text" id="UploadedOn" data-bind="date: UploadedOn" /><br />
+                                        UserID:<input id="UserID" name="UserID" type="text" data-bind="value:UserID" /><br />
+                                        <br />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="middle" align="right" width="5%">
+                                    File
+                                </td>
+                                <td align="left" width="70%">@* HT : DON'T class="required" because it'll err in edit mode*@
+                                    <input type="file" id="FileNameNEW" name="FileNameNEW" title="@maxFileSizMB" data-bind="value:FileNameNEW"
+                                    onchange='var fName = $(this).parent().children("input[type=text]:first");fName.val($(this).val()); fName.trigger("change");' />
+                                    <span class="small">@maxFileSizMB</span>
+                                    <div class="progress" style="display: inline">
+                                        <div class="bar" style="display: inline">
+                                        </div>
+                                        <div class="percent note" style="display: inline">
+                                        </div>
+                                    </div>
+                                    <div id="status" style="display: inline" class="error">
+                                    </div>
+                                    @*<input id="FileNameNEW" type="text" data-bind="value:FileNameNEW" />*@
+                                    <input id="FileName" Name="FileName" type="text" style="display: none" data-bind="value:FileName"
+                                        onchange='if($(this).val() != ""){$("#btnFHSubmit").removeAttr("disabled");}
+                                         else {$("#btnFHSubmit").attr("disabled", true);}' />
+                                </td>
+                                <td valign="middle" align="right" nowrap="nowrap" width="5%">
+                                    &nbsp;&nbsp;File Type
+                                </td>
+                                <td width="20%">
+                                    <select id="FileType" class="dropbox" name="FileType" data-bind="options: $parent.FileTypes, value:FileType, optionsText: 'value', optionsValue:'id'" style="width: 99%" @*onchange='$(this).parent().children("input:first").val($(this).children("option").filter(":selected").text());$(this).parent().children("input:first").trigger("change");'*@
+                                    onchange="setDDLtext(this, 'FileTypeTitle');"></select>
+                                    <input id="FileTypeTitle" name="FileTypeTitle" type="hidden" data-bind="value:FileTypeTitle" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" align="right">
+                                    Comment
+                                </td>
+                                <td rowspan="2" align="left" colspan="2">
+                                    <textarea data-bind="value:Comment" class="textbox" cols="60" id="Comment" name="Comment"
+                                        onblur="return trimTextAreaMaxLen(this,250);" rows="2" style="width: 90%"></textarea>
+                                </td>
+                                <td valign="top" align="right">
+                                    <input type="submit" data-bind="click:$parent.addFile" @* , enable: (FileName.length > 0) - only for observable*@
+                                        value="Add" class="button" onclick="$(this).attr('disabled', true);" title="Select a file, set type and click Add" disabled="disabled" id="btnFHSubmit" />
+                                    <input type="reset" data-bind="click:$parent.cancelFile" value="Cancel" class="button"
+                                        id="btnFHReset" />
+                            </tr>
+                        </table>
+                    }
+                </td>
+            </tr>
+        }
+        <tr>
+            <td align="center">
+                <table class="thinBorder" width="100%" border="0" data-bind="visible:allFiles().length > 0"
+                    id="tblFilesH">
+                    <thead class="header">
+                        <tr>
+                            @if (!isArchived)
+                            {
+                                <th align="left" nowrap="nowrap" style="width: 3%; display: none">
+                                    id &nbsp;&nbsp; A &nbsp;&nbsp; E &nbsp;&nbsp; D
+                                </th>
+                                <th width="3%">
+                                </th>
+                            
+                            }
+                            <th>
+                                File
+                            </th>
+                            <th style="width: 20%">
+                                Type
+                            </th>
+                            <th style="width: 30%">
+                                Comment
+                            </th>
+                            <th nowrap="nowrap">
+                                Uploaded By
+                            </th>
+                            <th nowrap="nowrap">
+                                Uploaded Date
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: allFiles()">
+                        <tr data-bind="css:{deletedTR:_Deleted()}">
+                            @if (!isArchived)
+                            {
+                                <td nowrap="nowrap" style="display: none">
+                                    <span data-bind='text:ID'></span>
+                                    <input type="checkbox" data-bind="checked:_Added" />
+                                    <input type="checkbox" data-bind="checked:_Edited" />
+                                    <input type="checkbox" data-bind="checked:_Deleted" />
+                                </td>
+                                <td nowrap="nowrap">
+                                    <div class="dDialog" onclick="doEditable(this);" data-bind="visible:!_Deleted(), click:$parent.setEdited">@Html.Raw(@Defaults.editImg)</div>
+                                    &nbsp;
+                                    <div class="dDialog" data-bind="visible:!_Deleted(), click:$parent.removeSelected">@Html.Raw(@Defaults.delImgForObj("file"))</div>
+                                    &nbsp;
+                                    <div class="dDialog" data-bind="visible:_Deleted(), click:$parent.unRemoveSelected">@Html.Raw(@Defaults.cancelImgOnly)
+                                        &nbsp; &nbsp;
+                                    </div>
+                                    @*@Html.Raw(Defaults.delPOSTImgTACO("CommentID", -1, "doCmtDelPost"))*@
+                                </td>
+                            }
+                            <td data-bind="text:FileName">
+                            </td>
+                            <td title="click to edit">
+                                <div style="overflow: hidden">
+                                    <select class="dropbox editableTX" data-bind="options:$parent.FileTypes, value:FileType,
+                                         optionsText: 'value', optionsValue:'id', event:{change:$parent.setEditedFlag}">
+                                    </select>
+                                </div>
+                            </td>
+                            <td title="click to edit">
+                                <textarea class="editableTX" data-bind="value:Comment, event:{change:$parent.setEditedFlag}"
+                                    onblur="trimTextAreaMaxLen(this,250);" rows="1"></textarea>
+                            </td>
+                            <td data-bind="text:UploadedBy">
+                            </td>
+                            <td data-bind="date: UploadedOn">
+                            </td>
+                            <td align="center">
+                                <div class="dDialog" data-bind="click:$parent.TriggerOpenWin, visible:CodeStr().length > 0">@Html.Raw(Defaults.clipImg)</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        @*@Html.Raw(Defaults.chkNoRecords(Model.Count(), 7))*@
+                    </tfoot>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+@if (!isArchived)
+{    
+    <text>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var bar = $('.bar');
+            var percent = $('.percent');
+            var status = $('#status');
+
+            $('#frmFiles').ajaxForm({
+                dataType: 'xml',
+                beforeSend: function () {                    
+                    status.empty();
+                    var percentVal = '0%';
+                    bar.width(percentVal)
+                    percent.html("uploading:" + percentVal);
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                    var percentVal = percentComplete + '%';
+                    bar.width(percentVal)
+                    percent.html("uploaded:" + percentVal);
+                },
+                success: function (responseXML, statusText, xhr, frm) {
+                    var percentVal = '100%';
+                    bar.width(percentVal)
+                    percent.html("Done:" + percentVal);
+                    //Reset add new
+                    viewModelFH.cancelFile(xhr);
+
+                    var xmlTxt = (xhr.responseXML != null) ? xhr.responseXML.xml : xhr.responseText;
+                    @*//IE : xhr.responseXML.xml                //FF: xhr.responseText*@
+
+                    if (xmlTxt == null || xmlTxt.length < 1) {
+                    @* //HT: Special case handling for IE *@
+                        if (xhr.responseXML.xml != null)
+                            xmlTxt = xhr.responseXML.xml;
+                        else if (xhr.responseXML.documentElement.textContent != null)
+                            xmlTxt = xhr.responseXML.documentElement.textContent;
+                    }
+
+                    if (xmlTxt.indexOf("fileUploadResponse") == -1) {
+                        viewModelFH.allFiles.pop();
+                    } // Something went wrong!
+
+                    if (xhr.responseXML != null && $.browser.msie) {// For IE
+                      @*//IE8 $("#taco_niteDIVFH").append(xhr.responseXML.documentElement.xml);//xmlTxt);
+                      //eval(xhr.responseXML.documentElement.xml);*@
+                        var tc = new $.taconite(responseXML); // might work in IE8
+                      @*try{ 
+                            // only to execute the function - kept for ref
+                            //eval(xhr.responseXML.getElementsByTagName("eval")[0].text); // IE8 - xhr.responseXML.documentElement.xml
+                            //eval(xhr.responseXML.getElementsByTagName("eval")[0].textContent); // IE9
+                      }catch(e){alert(e.message);}*@
+                    }
+                },
+                complete: function (xhr) {
+                    @*//status.html(xhr.responseText); DON'T set or it'll have two result messages and it can't choose*@
+                    percent.html("");
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    status.html(xhr.responseText + ":" + textStatus + ":" + errorThrown);
+                    viewModelFH.allFiles().pop();
+                }
+            });        
+                    
+        });
+        function fileUploadResponse(code, success, ID) {
+            if (success) {
+                ko.utils.arrayForEach(viewModelFH.allFiles(), function (file) {
+                    if (file.ID() == ID) { file.CodeStr(code); return; }
+                });                
+            }
+        }
+                
+        function doUploadifyForMultiFile() {
+            @{ // SO : 1729179/uploadify-session-and-authentication-with-asp-net-mvc
+    var auth = Request.Cookies[FormsAuthentication.FormsCookieName] == null ? string.Empty : Request.Cookies[FormsAuthentication.FormsCookieName].Value;
+    var ASPSESSID = HttpContext.Current.Session.SessionID;
+            }
+            var fuObj = $("#multiFileupload");
+            @*resetUploadify(); // Also see - / Destroy the queue in the script file
+            // https://jayendraka.wordpress.com/2013/10/18/use-uploadify-controls-with-asp-net-mvc4/ *@
+            var maxFileSize = '@Config.MaxFileSizMB' + 'MB';
+            fuObj.uploadify({
+                @*'fileTypeDesc': 'Image Files',
+                'fileTypeExts': '*.gif; *.jpg',*@
+                'fileObjName' : 'FileNameNEW',
+                'fileSizeLimit' : maxFileSize,
+                'swf': "@Url.Content("~/Content/uploadify/uploadify.swf")",
+                'cancelImg': "@Url.Content("~/Content/uploadify/uploadify-cancel.png")",
+                'uploader': "@Url.Action("Upload", "Claim")",
+                @*'formData': { 'ASPSESSID': '@ASPSESSID', 'AUTHID': '@auth', 'FileHdrObj':'' },*@
+                'buttonText': 'Try new multiple file(s) selector',
+                //'buttonImage' : "@Url.Content("~/Content/uploadify/uploadify-cancel.png")",
+                'width' : 200, height : 20,
+                'multi': 'true',
+                /* @* 'preventCaching' : false, To prevent it from generating unnecessary requests *@ */
+                'onQueueComplete': function (queueData) 
+                { 
+                   //alert("File(s) uploaded successfully");                    
+                },                
+                'onUploadStart' : function(file) {
+                    var fileAdded = viewModelFH.fileToAdd();  
+                     @* $("#FileName").val(data); - HT : won't work because its not an observable *@
+                     fileAdded.FileName = file.name;                     
+                     viewModelFH.addFile(fileAdded);
+                     var files = viewModelFH.allFiles();
+                     var fileAddedLatest = ko.mapping.toJSON(viewModelFH.allFiles()[files.length-1]);
+                     /* @* Or - http://www.uploadify.com/forum/#/discussion/8305/having-trouble-with-formdata-solved/p1
+                     this.settings.formData = {"ASPSESSID": "@ASPSESSID", "AUTHID": "@auth", "FileHdrObj" : fileAddedLatest }; *@ */
+                     
+                     @* /* Ref : http://www.uploadify.com/documentation/uploadify/formdata/ & 
+                     http://www.uploadify.com/forum/#/discussion/8285/uploadify-3-1-wont-pass-dynamic-form-data/p1*/ *@
+                     $("#multiFileupload").uploadify("settings", "formData",
+                     {"ASPSESSID": "@ASPSESSID", "AUTHID": "@auth", "FileHdrObj" : fileAddedLatest });
+                },
+                 'onUploadError' : function(file, errorCode, errorMsg, errorString) {
+                    showNOTY('The file ' + file.name + ' could not be uploaded (size limit 33mb): ' + errorString, false);                    
+                    popFileEntry();
+                },
+                'onUploadSuccess' : function(file, dataAll, response) {                     
+                     var data = dataAll.split('~~~');
+                     if(data[0] == "1")
+                     {
+                        ko.utils.arrayForEach(viewModelFH.allFiles(), 
+                            function (file) { if (file.ID() == data[2]) { file.CodeStr(data[3]); return; }
+                        });
+                    }
+                    else // internal failure
+                    {
+                       popFileEntry();
+                    }
+                    eval(data[1]); // show noty for success or failure
+                } 
+            });
+        }
+
+        function popFileEntry(){
+            viewModelFH.allFiles().pop(); viewModelFH.allFiles.valueHasMutated(); // explicitly refresh
+        }
+
+    </script>
+    </text>
+}

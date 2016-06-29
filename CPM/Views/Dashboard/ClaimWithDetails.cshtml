@@ -1,0 +1,39 @@
+﻿@model IEnumerable<CPM.DAL.vw_ClaimWithItemDetail>
+@using System.Collections
+@using CPM.Helper
+@{Layout = ""; /* Master page is NOT needed here */}
+<style>
+#rpt td {font-size: 12px;font-family: Calibri, Verdana, Helvetica, Sans-Serif;border: solid 1px #BFB88E;border-collapse: collapse;text-align: center;}
+</style>
+@if (Model.Count() > 0)
+{
+<table border="1" id="rpt">
+    <thead>
+    <tr style="background-color:#EEECE1;">
+        <th>Claim #</th>
+        <th>Customer Ref</th>
+        <th>Claim Date MM/dd/yyyy</th>
+        <th>Customer Org Code</th>
+        <th>Customer Org Name</th>
+        <th>Brand</th>        
+        <th>ItemNo</th>        
+        <th>Defect</th>
+        <th>Description</th>
+        <th>Size</th>
+        <th>DOT</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    { 
+<tr><td>@item.ClaimNo</td><td>&nbsp;@item.CustRefNo</td><td>@item.ClaimDateTxt</td><td>&nbsp;@item.CustOrgCode</td><td>@item.CustOrgName</td><td>@item.Brand</td><td>&nbsp;@item.ItemNo</td><td>@item.Defect</td><td>@item.Description</td><td>&nbsp;@item.Size</td><td>&nbsp;@item.DOT</td></tr>
+    }
+    </tbody>
+</table>
+}
+else
+{ 
+<table>
+<tr><td><i> No records filtered / found </i></td></tr>
+</table>
+}
