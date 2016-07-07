@@ -70,10 +70,13 @@ namespace CPM.Controllers
             //Special case: Set the filter back if it existed so that if the user "re-visits" the page he gets the previous filter (unless reset or logged off)
             searchOpts = _Session.Search[Filters.list.ActivityLog];
 
-            //vw_ActivityLog searchOptions = (vw_ActivityLog)(searchOpts);
+            vw_ActivityLog searchOptions = new vw_ActivityLog();
+            if (searchOpts.GetType().IsEquivalentTo(typeof(vw_ActivityLog)))
+                searchOpts = (vw_ActivityLog)(searchOpts);
+            // Might give error : vw_ActivityLog searchOptions = (vw_ActivityLog)(searchOpts);
 
             if (_Session.IsOnlyCustomer) //If its customer he can view only his activity
-                (searchOpts as vw_ActivityLog).UserID = _SessionUsr.ID; // searchOptions
+                searchOptions.UserID = _SessionUsr.ID; // searchOptions
 
             if (fetchOtherData){
             ViewData["Activities"] = new ActivityLogService(ActivityLogService.Activity.Login).GetActivities();

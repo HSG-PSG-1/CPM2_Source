@@ -98,25 +98,25 @@
                 @*MENU : START *@
                 <div style="text-align: left;">
                     <ul id="menu1">
-                        <li><span class="ui-icon ui-icon-home"></span>
+                        <li>
                             @Html.ActionLink("Dashboard", "List", "Dashboard")
                         </li>
-                        <li><span class="ui-icon ui-icon-document"></span>
+                        @*<li><span class="ui-icon ui-icon-document"></span>
                             @Html.ActionLink("Report", "ClaimDetailsReport", "Dashboard")
                         </li>
                         <li><span class="ui-icon ui-icon-signal"></span>
                             @Html.ActionLink("Charts", "Charts", "Dashboard")
-                        </li>
+                        </li>*@
                         @if (_Session.RoleRights.ManageMaster || _Session.RoleRights.ManageUser || _Session.RoleRights.ManageRole)
                         { 
-                            <li><span class="ui-icon ui-icon-pencil"></span><a href="#" style1="text-decoration:none">Manage</a>
+                            <li><a href="#" style1="text-decoration:none">Manage</a>
                                 <ul>
                                     @if (_Session.RoleRights.ManageUser)
-                                    {<li><span class="ui-icon ui-icon-person"></span>@Html.ActionLink("Users", "List", "User")</li>}
+                                    {<li>@Html.ActionLink("Users", "List", "User")</li>}
                                     @if (_Session.RoleRights.ManageRole)
-                                    {<li><span class="ui-icon 	ui-icon-locked"></span>@Html.ActionLink("Roles", "Manage", "Role")</li>}
+                                    {<li>@Html.ActionLink("Roles", "Manage", "Role")</li>}
                                     @if (_Session.RoleRights.ManageMaster)
-                                    {<li><span class="ui-icon ui-icon-document-b"></span>@Html.ActionLink("Master", "Defect", "Manage")
+                                    {<li>@Html.ActionLink("Master", "Defect", "Manage")
                                         <ul>
                                             <li>@Html.ActionLink("Defect", "Defect", "Manage")</li>
                                             <li>@Html.ActionLink("Claim Status", "Claim_Status", "Manage")</li>
@@ -128,12 +128,12 @@
 
                                     @if (_Session.RoleRights.ManageSetting)
                                     { 
-                                        <li><span class="ui-icon ui-icon-gear"></span>@Html.ActionLink("Setting", "Manage", "Setting")</li>}
+                                        <li>@Html.ActionLink("Setting", "Manage", "Setting")</li>}
                                 </ul>
                             </li>
                         }
                         @if (_Session.RoleRights.ViewActivity)
-                        { <li><span class="ui-icon ui-icon-clipboard"></span>@Html.ActionLink("Activity", "Log", "Activity")</li>}
+                        { <li>@Html.ActionLink("Activity", "Log", "Activity")</li>}
                     </ul>
                     <br style="clear: left" />
                 </div>

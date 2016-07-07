@@ -335,7 +335,9 @@ namespace CPM.Helper
             _None,
             Dashboard,
             ActivityLog,
-            User
+            User,
+            DashboardClaimWithDetails,
+            DashboardCharts
         }
 
         // Indexer declaration. 

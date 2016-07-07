@@ -91,7 +91,8 @@ namespace CPM.Controllers
             }
             catch (Exception ex) { sendMail = false; msg = ex.Message; }
             HttpContext.Response.Clear(); // to avoid debug email content from rendering !
-            return Json(new { sendMail, msg }, JsonRequestBehavior.AllowGet);
+            bool selfNotif = !sendMail;
+            return Json(new { sendMail, msg, selfNotif }, JsonRequestBehavior.AllowGet);
         }        
     }
 }

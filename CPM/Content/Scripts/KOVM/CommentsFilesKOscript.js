@@ -94,7 +94,8 @@ var commentsViewModel = function ()
                     },
                     function (result) {
                         //alert(result); HT: we can notify user if a successful email was sent
-                        showNOTY(result.msg, result.sendMail);
+                        if(!result.selfNotif)
+                            showNOTY(result.msg, result.sendMail);
                         if (result.sendMail) {
                             $("#AssignToOLD").val(_AssignedTo).trigger("change");
                         }

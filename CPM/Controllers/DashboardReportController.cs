@@ -17,7 +17,8 @@ namespace CPM.Controllers
         public ActionResult Charts(int? index, string qData)
         {
             //Special case: Set the filter back if it existed so that if the user "re-visits" the page he gets the previous filter (unless reset or logged off)
-            searchOpts = new vw_Claim_Dashboard(); // _Session.Search[Filters.list.Dashboard];
+            base.filter = Filters.list.DashboardCharts;
+            searchOpts = _Session.Search[Filters.list.DashboardCharts];
 
             populateData(true);
             ViewData["gridPageSize"] = gridPageSize; // Required to adjust pagesize for grid
@@ -32,7 +33,8 @@ namespace CPM.Controllers
         public ActionResult ClaimDetailsReport()
         {
             //Special case: Set the filter back if it existed so that if the user "re-visits" the page he gets the previous filter (unless reset or logged off)
-            searchOpts = new vw_ClaimWithItemDetail();  //_Session.Search[Filters.list.Dashboard];
+            base.filter = Filters.list.DashboardClaimWithDetails;
+            searchOpts = _Session.Search[Filters.list.DashboardClaimWithDetails];
 
             populateReportData(true, new vw_ClaimWithItemDetail());
             
