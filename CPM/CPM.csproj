@@ -84,6 +84,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.30506.0\lib\net40\System.Web.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -233,6 +234,7 @@
     <Content Include="Content\jQUI\min\jquery-migrate-1.2.1.min.js" />
     <Content Include="Content\jQUI\min\jquery-ui.1.11.0.min.js" />
     <Content Include="Content\jQUI\min\jquery-ui.1.11.4.min.js" />
+    <Content Include="Content\Scripts\jquery.form.3.24.js" />
     <Content Include="Content\Scripts\jquery.validate.1.14.0.js" />
     <Content Include="Content\Scripts\jquery.table.nav.1.0.js" />
     <Content Include="Content\Scripts\jquery.blockUI.js" />
@@ -323,7 +325,6 @@
     <Content Include="Views\Role\RoleGrid.cshtml" />
     <Content Include="Views\Dashboard\ClaimWithDetails.cshtml" />
     <Content Include="Content\Scripts\KOVM\ItemsKOscriptOLD.js" />
-    <None Include="Properties\PublishProfiles\Profile1.pubxml" />
     <Content Include="Views\Claim\ItemsNew.cshtml" />
     <Content Include="Views\Dashboard\GCPdemo.cshtml" />
     <Content Include="Views\Dashboard\GCPstats.cshtml" />
@@ -332,6 +333,7 @@
     <Content Include="Views\Dashboard\ClaimDetailsReport.cshtml" />
     <Content Include="Views\Dashboard\Reports.cshtml" />
     <Content Include="Views\Dashboard\Charts.cshtml" />
+    <None Include="Properties\PublishProfiles\Local.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

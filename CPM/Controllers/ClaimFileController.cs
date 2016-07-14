@@ -203,7 +203,8 @@ namespace CPM.Controllers
             #region New file upload
 
             if ((FileDetailObj.FileNameNEW ?? FileDetailObj.FileName) != null)
-            {//HT Delete old\existing file? For Async need to wait until final commit                                
+            {//HT Delete old\existing file? For Async need to wait until final commit             
+                FileDetailObj.FileName = System.IO.Path.GetFileName(FileDetailObj.FileName); // Ensure its file name and not path!   
                 ChkAndSaveClaimFile("FileDetailNameNEW", ClaimID, ClaimGUID, ClaimDetailD);
                 success = (ModelState["FileName"].Errors.Count() < 1);
             }
@@ -262,8 +263,8 @@ namespace CPM.Controllers
         void ChkAndSaveClaimFile(string hpFileKey, int ClaimId, string ClaimGUID, int? ClaimDetailId = null)
         {
             HttpPostedFileBase hpFile = Request.Files[hpFileKey];
-
-            FileIO.result uploadResult = FileIO.UploadAndSave(hpFile, ClaimId, ClaimGUID, ClaimDetailId);
+            string otherIssue = "Unable to upload file";
+            FileIO.result uploadResult = FileIO.UploadAndSave(hpFile, ClaimId, ClaimGUID, ref otherIssue, ClaimDetailId);
 
             #region Add error in case of an Upload issue
 
@@ -277,7 +278,8 @@ namespace CPM.Controllers
                     ModelState.AddModelError("FileName", string.Format("File size cannot exceed {0}MB", Config.MaxFileSizMB)); break;
                 case FileIO.result.successful: break;
                 default://Any other issue
-                    ModelState.AddModelError("FileName", "Unable to upload file"); break;
+                    otherIssue = otherIssue.Replace("'", "\"").Replace("\\", "\\\\"); // to avoid conflict with scripting
+                    ModelState.AddModelError("FileName", otherIssue); break;
             }
 
             #endregion

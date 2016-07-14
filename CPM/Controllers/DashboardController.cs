@@ -245,7 +245,10 @@ namespace CPM.Controllers
         {
             //using (MiniProfiler.Current.Step("Populate lookup Data"))
             {
-                vw_Claim_Dashboard searchOptions = (vw_Claim_Dashboard)(searchOpts);
+                vw_Claim_Dashboard searchOptions = new vw_Claim_Dashboard();
+                if (searchOpts.GetType().IsEquivalentTo(typeof(vw_Claim_Dashboard)))
+                    searchOpts = (vw_Claim_Dashboard)(searchOpts);
+
                 if (_Session.IsOnlyCustomer) searchOptions.CustID = _SessionUsr.OrgID;//Set the cust filter
                 if (_Session.IsOnlyVendor) searchOptions.VendorID = _SessionUsr.OrgID;//Set the Vendor filter
                 if (_Session.IsOnlySales) searchOptions.SalespersonID = _SessionUsr.ID;//Set the Sales filter
