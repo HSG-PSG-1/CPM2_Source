@@ -11,9 +11,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>@ViewBag.Title</title>
-<!-- meta http-equiv="X-UA-Compatible" content="IE=edge;" if IE DOM event issues occur 
-    https://forum.jquery.com/topic/jquery-2-1-1-min-js-object-doesn-t-support-property-or-method-addeventlistener
-     /-->
+@* https://forum.jquery.com/topic/jquery-2-1-1-min-js-object-doesn-t-support-property-or-method-addeventlistener *@
+     <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
+
     <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.ico")" type="image/x-icon" />
     <link rel="icon" href="@Url.Content("~/Content/favicon.ico")" type="image/ico" />
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
@@ -90,7 +90,7 @@
                                 </td>
                                 <td colspan="2" valign="top" align="right">
                                     <input type="submit" data-bind="click:$parent.addFile, enable: ($data.FileName.length > 0)" value="Add" class="button" 
-                                    onclick="$(this).attr('disabled', true);" title="Select a file, set type and click Add" id="btnFDSubmit" />
+                                    onclick1="$(this).attr('disabled', true);" title="Select a file, set type and click Add" id="btnFDSubmit" />
                                     <input type="reset" data-bind="click:$parent.cancelFile" value="Cancel" class="button" id="btnFDReset" />
                             </tr>
                         </table>
@@ -240,7 +240,7 @@
                 } // Something went wrong!
 
                 if (xhr.responseXML != null  && $.browser.msie){ @*// For IE (explicitly evalute the taconite script *@
-                      var tc = new $.taconite(responseXML); // might work in IE8                      
+                      //var tc = new $.taconite(responseXML); // might work in IE8                      
                     }
             },
             complete: function (xhr) {

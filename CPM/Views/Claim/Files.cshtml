@@ -56,7 +56,7 @@
                                 </td>
                                 <td align="left" width="70%">@* HT : DON'T class="required" because it'll err in edit mode*@
                                     <input type="file" id="FileNameNEW" name="FileNameNEW" title="@maxFileSizMB" data-bind="value:FileNameNEW"
-                                    onchange='var fName = $(this).parent().children("input[type=text]:first");fName.val($(this).val()); fName.trigger("change");' />
+                                    onchange="var fName = $(this).parent().children('input[type=text]:first');fName.val($(this).val()); fName.trigger('change');" />
                                     <span class="small">@maxFileSizMB</span>
                                     <div class="progress" style="display: inline">
                                         <div class="bar" style="display: inline">
@@ -68,8 +68,8 @@
                                     </div>
                                     @*<input id="FileNameNEW" type="text" data-bind="value:FileNameNEW" />*@
                                     <input id="FileName" Name="FileName" type="text" style="display: none" data-bind="value:FileName"
-                                        onchange='if($(this).val() != ""){$("#btnFHSubmit").removeAttr("disabled");}
-                                         else {$("#btnFHSubmit").attr("disabled", true);}' />
+                                        onchange="if($(this).val() != ''){$('#btnFHSubmit').removeAttr('disabled');}
+                                         else {$('#btnFHSubmit').attr('disabled', true);}" />
                                 </td>
                                 <td valign="middle" align="right" nowrap="nowrap" width="5%">
                                     &nbsp;&nbsp;File Type
@@ -89,10 +89,9 @@
                                         onblur="return trimTextAreaMaxLen(this,250);" rows="2" style="width: 90%"></textarea>
                                 </td>
                                 <td valign="top" align="right">
-                                    <input type="submit" data-bind="click:$parent.addFile" @* , enable: (FileName.length > 0) - only for observable*@
-                                        value="Add" class="button" onclick="$(this).attr('disabled', true);" title="Select a file, set type and click Add" disabled="disabled" id="btnFHSubmit" />
-                                    <input type="reset" data-bind="click:$parent.cancelFile" value="Cancel" class="button"
-                                        id="btnFHReset" />
+                                    <input type="submit" data-bind="click:$parent.addFile" @* , enable: (FileName.length > 0) - only for observable*@ value="Add" class="button" onclick1="$(this).attr('disabled', true); return true;" title="Select a file, set type and click Add" disabled="disabled" id="btnFHSubmit" />
+                                    
+                                    <input type="reset" data-bind="click:$parent.cancelFile" value="Cancel" class="button" id="btnFHReset" />
                             </tr>
                         </table>
                     }
@@ -196,15 +195,15 @@
             $('#frmFiles').ajaxForm({
                 dataType: 'xml',
                 beforeSend: function () {                    
-                    status.empty();
+                   try{ status.empty();
                     var percentVal = '0%';
                     bar.width(percentVal)
-                    percent.html("uploading:" + percentVal);
+                    percent.html("uploading:" + percentVal);} catch (ex) { showNOTY(ex + ":" + ex.Message, false); }
                 },
                 uploadProgress: function (event, position, total, percentComplete) {
-                    var percentVal = percentComplete + '%';
+                  try{  var percentVal = percentComplete + '%';
                     bar.width(percentVal)
-                    percent.html("uploaded:" + percentVal);
+                    percent.html("uploaded:" + percentVal);} catch (ex) { showNOTY(ex + ":" + ex.Message, false); }
                 },
                 success: function (responseXML, statusText, xhr, frm) {
                     var percentVal = '100%';
@@ -231,7 +230,7 @@
                     if (xhr.responseXML != null && $.browser.msie) {// For IE
                       @*//IE8 $("#taco_niteDIVFH").append(xhr.responseXML.documentElement.xml);//xmlTxt);
                       //eval(xhr.responseXML.documentElement.xml);*@
-                        var tc = new $.taconite(responseXML); // might work in IE8
+                      //  var tc = new $.taconite(responseXML); // might work in IE8
                       @*try{ 
                             // only to execute the function - kept for ref
                             //eval(xhr.responseXML.getElementsByTagName("eval")[0].text); // IE8 - xhr.responseXML.documentElement.xml

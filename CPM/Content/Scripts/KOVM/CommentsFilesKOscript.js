@@ -181,24 +181,28 @@ var filesHeaderModel = function () {
         file.LastModifiedDate(Date111);
     }
     self.addFile = function (file) {
-        if (file.FileName == null || file.FileName == "") {
-            //http://knockoutjs.com/documentation/event-binding.html
-            showNOTY("Please select a file to upload", false); return false;
-        }
-        else {
-            /* SO: 857618/javascript-how-to-extract-filename-from-a-file-input-control */
-            file.FileName = file.FileName.split(/(\\|\/)/g).pop();
-            /* ABOVE DOESN'T WORK FOR ALL VERSIONS OF IE - so NEED  to handle it on SERVER SIDE */
-            if (!IsFHEditMode) {
-                file.ID = NextNewFileID;
-                self.allFiles.push(ko.mapping.fromJS(cloneObservable(file)));
-                NextNewFileID = NextNewFileID - 1;
-                self.emptyFile.ID = NextNewFileID; // NOT WORKING as expected
+
+        try  
+        {
+            if (file.FileName == null || file.FileName == "") {
+                //http://knockoutjs.com/documentation/event-binding.html
+                showNOTY("Please select a file to upload", false); return false;
             }
-            else { /* Editmode Handled by KO */; }
-            $('#tblFilesH').tableNav(); // for newly created TR
-            setFocusEditableGrid("tblFilesH", false);
-        }
+            else {
+                /* SO: 857618/javascript-how-to-extract-filename-from-a-file-input-control */
+                file.FileName = file.FileName.split(/(\\|\/)/g).pop();
+                /* ABOVE DOESN'T WORK FOR ALL VERSIONS OF IE - so NEED  to handle it on SERVER SIDE */
+                if (!IsFHEditMode) {
+                    file.ID = NextNewFileID;
+                    self.allFiles.push(ko.mapping.fromJS(cloneObservable(file)));
+                    NextNewFileID = NextNewFileID - 1;
+                    self.emptyFile.ID = NextNewFileID; // NOT WORKING as expected
+                }
+                else { /* Editmode Handled by KO */; }
+                $('#tblFilesH').tableNav(); // for newly created TR
+                setFocusEditableGrid("tblFilesH", false);
+            }
+        } catch (ex) { showNOTY(ex + ":" + ex.Message, false); }
         return true; // for ajax submit
     };
 

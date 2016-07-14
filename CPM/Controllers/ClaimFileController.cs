@@ -203,7 +203,8 @@ namespace CPM.Controllers
             #region New file upload
 
             if ((FileDetailObj.FileNameNEW ?? FileDetailObj.FileName) != null)
-            {//HT Delete old\existing file? For Async need to wait until final commit                                
+            {//HT Delete old\existing file? For Async need to wait until final commit             
+                FileDetailObj.FileName = System.IO.Path.GetFileName(FileDetailObj.FileName); // Ensure its file name and not path!   
                 ChkAndSaveClaimFile("FileDetailNameNEW", ClaimID, ClaimGUID, ClaimDetailD);
                 success = (ModelState["FileName"].Errors.Count() < 1);
             }
