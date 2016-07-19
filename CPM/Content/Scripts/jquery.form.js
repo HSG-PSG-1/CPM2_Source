@@ -957,7 +957,7 @@
         // #386; account for inputs outside the form which use the 'form' attribute
         if (formId) {
             // els2 = $(':input[form="' + formId + '"]').get(); // hat tip @thet
-            els2 = $("form#" + formId + " :input").get(); // HT : to prevent IE 11 jQ error
+            els2 = $("form#" + formId + " :input").get(); // HT: to prevent IE 11 jQ error
                 
 
             if (els2.length) {

@@ -421,7 +421,7 @@ hmnt</a>*@
             beforeLoad: function( event, ui ) {
                 ui.ajaxSettings.cache = false;
                 if ( ui.tab.data( "loaded" ) ) {  event.preventDefault();  return;  } 
-                ui.jqXHR.success(function() {   ui.tab.data( "loaded", true ); });
+                ui.jqXHR.done(function() {   ui.tab.data( "loaded", true ); });
                },
             activate: function(event, ui) { setFocusUserEditFocus(event, ui) },
             beforeActivate: function(e, ui) { return showHideLocations(true); }            

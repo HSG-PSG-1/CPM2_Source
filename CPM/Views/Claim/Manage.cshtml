@@ -21,7 +21,7 @@
                 beforeLoad: function( event, ui ) {
                     ui.ajaxSettings.cache = false;
                     if ( ui.tab.data( "loaded" ) ) {  event.preventDefault();  return;  } 
-                    ui.jqXHR.success(function() {   ui.tab.data( "loaded", true ); });
+                    ui.jqXHR.done(function() {   ui.tab.data( "loaded", true ); });
                 },
                 activate: function(event, ui) { setFocus1(event, ui) } 
             }); @*//HT: cache: true - to prevent reload on each tab select!*@
@@ -408,7 +408,7 @@
         if (e.stopPropagation) {e.stopPropagation();e.preventDefault();}        
     }
     // A jQuery event , which is triggered after "onbeforeunload" 
-    $(window).unload(function(){ // SO : 19179514            
+    $(window).on('beforeunload', function(){ // SO : 18783535            
             // trigger the final cleanup 
             if (skipCommitChk) { skipCommitChk = false; return; }
             $.post('@Url.Action("CleanupTempUpload")', { ClaimGUID : '@Model.CVM.ClaimGUID'});            

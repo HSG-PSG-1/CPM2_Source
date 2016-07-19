@@ -6,7 +6,6 @@ using System.Linq.Dynamic;
 using System.Data.Linq.SqlClient;
 using CPM.DAL;
 using CPM.Helper;
-using Webdiyer.WebControls.Mvc;
 
 namespace CPM.Services
 {
@@ -56,24 +55,6 @@ namespace CPM.Services
         #endregion
 
         #region Search / Fetch
-
-        public PagedList<vw_Users_Role_Org> Search(string orderBy, int? pgIndex, int pageSize, vw_Users_Role_Org usr)
-        {
-            orderBy = string.IsNullOrEmpty(orderBy) ? sortOn : orderBy;
-
-            using (dbc)
-            {
-                IQueryable<vw_Users_Role_Org> userQuery = (from vw_u in dbc.vw_Users_Role_Orgs select vw_u);
-                //Get filters - if any
-                userQuery = PrepareQuery(userQuery, usr);
-                // Apply Sorting, Pagination and return PagedList
-                return userQuery.OrderBy(orderBy).ToPagedList(pgIndex ?? 1, pageSize);
-
-                /* Apply pagination and return
-                return userQuery.Skip(startRow).Take(pageSize).ToList<vw_User_Org_UserRole>();
-                */
-            }
-        }
 
         public List<vw_Users_Role_Org> SearchKO(vw_Users_Role_Org usr)//string orderBy, int? pgIndex, int pageSize, vw_Users_Role_Org usr, bool fetchAll)
         {

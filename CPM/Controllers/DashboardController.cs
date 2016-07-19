@@ -167,7 +167,7 @@ namespace CPM.Controllers
             //this.Response.End();
 
             populateData(false);
-            var result = new DashboardService().Search(sortExpr, 1, gridPageSize, (vw_Claim_Dashboard)searchOpts, true, _Session.IsOnlyCustomer);
+            var result = new DashboardService().SearchKO(sortExpr, 1, gridPageSize, (vw_Claim_Dashboard)searchOpts, true, _Session.IsOnlyCustomer);
 
             searchOpts = new vw_Claim_Dashboard();
             populateData(false);
@@ -184,7 +184,7 @@ namespace CPM.Controllers
         public ActionResult ExcelPDF()
         {   
             populateData(false);
-            List<vw_Claim_Dashboard> printView = new DashboardService().Search(sortExpr, 1, gridPageSize, (vw_Claim_Dashboard)searchOpts, true, _Session.IsOnlyCustomer);
+            List<vw_Claim_Dashboard> printView = new DashboardService().SearchKO(sortExpr, 1, gridPageSize, (vw_Claim_Dashboard)searchOpts, true, _Session.IsOnlyCustomer);
             
             string GUID = _SessionUsr.ID.ToString();
             return new ReportManagement.StandardPdfRenderer().BinaryPdfData(this, "Dashboard" + GUID, "Excel", printView);
