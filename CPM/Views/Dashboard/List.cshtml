@@ -152,7 +152,7 @@
    var skipCommitChk = false;
    $(document).ready(function () {      
        createKO();
-       //bind event to check claim commit
+       //bind event to ajax postback search options
        window.onbeforeunload = function (e) {
            if (skipCommitChk) { skipCommitChk = false; return; }
            $.ajax({

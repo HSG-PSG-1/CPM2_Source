@@ -176,7 +176,7 @@
                                                     <select id="ddlRoles" class="dropDown required" data-bind="options: $parent.roles, value:RoleID, optionsText: 'TEXT', optionsValue:'ID'"
                                                         onchange="fillOrgs(true);">
                                                     </select>&nbsp;
-                                                    <input class="ignore" id="OrgType" name="OrgType" type="hidden" data-bind="value:OrgTypeId" />
+                                                    <input class="ignore" id="OrgTypeId" name="OrgTypeId" type="hidden" data-bind="value:OrgTypeId" />
                                                 </td>
                                                 <td align="right" class="tdSalesperson">
                                                     Salesperson Code :
@@ -201,7 +201,7 @@
                                                     Organization :
                                                 </td>
                                                 <td colspan="3">
-                                                    <input class="required" type="text" data-bind="value:OrgName" style="width: 250px" onblur="showHideLocations(true);" name="OrgName" id="OrgName" autocomplete="off" />&nbsp;&nbsp;@Html.Raw(string.Format(Defaults.lookupImgBtn, "OrgName"))
+                                                    <input class="required" type="text" data-bind="value:OrgName" style="width: 250px" onblur="showHideLocations();" name="OrgName" id="OrgName" autocomplete="off" />&nbsp;&nbsp;@Html.Raw(string.Format(Defaults.lookupImgBtn, "OrgName"))
                                                     <input id="OrgID" name="OrgID" type="text" data-bind="value:OrgID" />
                                                     <input type="hidden" data-bind="value:OriOrgId" name="OriOrgId" id="OriOrgId" />
                                                 </td>
@@ -393,38 +393,38 @@ hmnt</a>*@
             renderAutoComplete(urlPath, idBox, txtBox);//refresh the autocomplete
             //Need to have a custom select
             $(txtBox).bind( "autocompleteselect", function(event, ui) {
-            //set value if a valid item is selected
-            if (ui.item.id == null) { event.preventDefault(); } 
-            else log(ui.item, idBox);$("#OrgType").val(ui.item.OrgTypeId);});
+                //set value if a valid item is selected
+                if (ui.item.id == null) { event.preventDefault(); } 
+                else
+                {
+                    log(ui.item, idBox);
+                    $("#OrgTypeId").val(ui.item.OrgTypeId).trigger("change");
+                    // HT:: Need to set OrgTypeText
+                }
+            });
             
-            showHideLocations(true);//Set false if want to Disable Locations tab until a valid Customer Org is selected
+            showHideLocations();//Set false if want to Disable Locations tab until a valid Customer Org is selected
         }
         
         //Caching: http://developwithstyle.com/articles/2010/05/14/jquery-ui-autocomplete-is-it-any-good.html
-        $().ready(function() {
-            // Shift tab rendering to a separate function            
-            @*setupValidation(); //setup validation           
-            fillOrgs(false); //setup Org dropdown and sp
-            //Enable/Disable tab if orgtype is NOT customer
-            if (Model.showLocations)
-            { @Html.Raw("showHideLocations(true)");
-            }*@
-        }); 
-
+        
         function renderUserEditTab()
         {
             //HT: DON'T use or it'll create tab without any of the following settings -
             // if($("#tabs").tabs().length > 0) return;
 
             $("#tabs").tabs({ 
-            /* @*cache: true, spinner: 'Loading...', ajaxOptions: { cache: false }, http://jqueryui.com/upgrade-guide/1.9/#deprecated-ajaxoptions-and-cache-options-added-beforeload-event *@ */
+                /* 
+                @*cache: true, spinner: 'Loading...', ajaxOptions: { cache: false }, 
+                http://jqueryui.com/upgrade-guide/1.9/#deprecated-ajaxoptions-and-cache-options-added-beforeload-event *@ */
             beforeLoad: function( event, ui ) {
                 ui.ajaxSettings.cache = false;
                 if ( ui.tab.data( "loaded" ) ) {  event.preventDefault();  return;  } 
-                ui.jqXHR.success(function() {   ui.tab.data( "loaded", true ); });
+                ui.jqXHR.done(function() {   ui.tab.data( "loaded", true ); });
                },
             activate: function(event, ui) { setFocusUserEditFocus(event, ui) },
-            beforeActivate: function(e, ui) { return showHideLocations(true); }            
+            @* as its an ajax tab this will be triggerred only once 
+            beforeActivate: function(e, ui) { return showHideLocations(true); } *@           
             });
         }
         
@@ -451,21 +451,19 @@ hmnt</a>*@
             }
         }
         
-        function showHideLocations(show) {
-            if (show) {
-                var OrgID = $("#OrgID").val();
-                var IsOrgTypeCustomer = ($("#OrgType").val() == '@((int)OrgService.OrgType.Customer)');
-                //Verify that a customer is selected
-                show = show && IsOrgTypeCustomer && (OrgID != null && OrgID.length > 0);
-            }
-            //show/hide
-            if($("#tabs").tabs().length > 0)
-            {
-                if (show) $("#tabs").tabs("enable", 1);
-                else $("#tabs").tabs("disable", 1);            
-            }
-            return show;//for tab select event
+    function showHideLocations() {
+        var OrgID = $("#OrgID").val();
+        var IsOrgTypeCustomer = ($("#OrgTypeId").val() == '@((int)OrgService.OrgType.Customer)');
+        //Verify that a customer is selected
+        var show = @*show && *@IsOrgTypeCustomer && (OrgID != null && OrgID.length > 0);
+        //show/hide
+        if($("#tabs").tabs().length > 0)
+        {
+            if (show) $("#tabs").tabs("enable", 1);
+            else $("#tabs").tabs("disable", 1);            
         }
+        return show;//for tab select event
+    }
         
         function showSalesperson()
         {

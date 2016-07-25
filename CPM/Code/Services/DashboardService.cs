@@ -5,7 +5,6 @@ using System.Linq.Dynamic;
 using System.Data.Linq.SqlClient;
 using CPM.DAL;
 using CPM.Helper;
-using Webdiyer.WebControls.Mvc;
 
 namespace CPM.Services
 {
@@ -17,45 +16,7 @@ namespace CPM.Services
         public const string sortOn = "ClaimNo DESC", sortOn1 = "ClaimNo DESC";
 
         #endregion
-
-        public List<vw_Claim_Dashboard> Search(string orderBy, int? pgIndex, int pageSize, vw_Claim_Dashboard das, bool isExcelReport, bool applyLocFilter)
-        {
-            orderBy = string.IsNullOrEmpty(orderBy) ? sortOn : orderBy;
-
-            using (dbc)
-            {
-                IQueryable<vw_Claim_Dashboard> dasQ;
-                #region Special case for customer (apply accessible location filter)
-                if (!applyLocFilter)
-                    dasQ = (from vw_u in dbc.vw_Claim_Dashboards select vw_u);
-                else // only for customer
-                    dasQ = (from vw_u in dbc.vw_Claim_Dashboards
-                            join ul in dbc.UserLocations on new { LocID = vw_u.ShipToLocationID } equals new { LocID = ul.LocID }
-                            where ul.UserID == _SessionUsr.ID
-                            select vw_u);
-                #endregion
-
-                //Get filters - if any
-                dasQ = PrepareQuery(dasQ, das);
-                // Apply Sorting, Pagination and return PagedList
-
-                #region Sort and Return result
-                //Special case to replace Customproperty with original (for ShipToLoc)
-                // For better implementation: SO: 2241643/how-to-use-a-custom-property-in-a-linq-to-entities-query
-                orderBy = (orderBy ?? "").Replace("ShipToLocAndCode", "ShipToLoc");
-
-                if (isExcelReport)
-                    return dasQ.OrderBy(orderBy).ToList<vw_Claim_Dashboard>();
-                else
-                    return dasQ.OrderBy(orderBy).ToPagedList(pgIndex ?? 1, pageSize);
-
-                /* Apply pagination and return - kept for future ref
-                return dasQ.OrderBy(orderBy).Skip(pgIndex.Value).Take(pageSize).ToList<vw_Claim_Dashboard>(); 
-                */
-                #endregion
-            }
-        }
-
+                
         public List<vw_Claim_Dashboard> SearchKO(string orderBy, int? pgIndex, int pageSize, vw_Claim_Dashboard das, bool isExcelReport, bool applyLocFilter)
         {
             orderBy = string.IsNullOrEmpty(orderBy) ? sortOn : orderBy;
@@ -174,8 +135,6 @@ namespace CPM.Services
 
                 //sorting already applied by the view
                 return dasQ.ToList<vw_ClaimWithItemDetail>();
-
-                return dasQ.OrderBy("ClaimNo").ToPagedList(pgIndex ?? 1, pageSize);
             }
         }
 

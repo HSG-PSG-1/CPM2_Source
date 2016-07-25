@@ -1,6 +1,6 @@
 ﻿@model List<CPM.DAL.UserLocation>
 @{ const int LocPgSize = 10; }
-   @if(Model == null || Model.Count < 1){ <span>No locations found</span>} 
+   @if(Model == null || Model.Count < 1){ <span>No locations found.</span> <br /> <span class="small">Note: If you've just changed User's Role or Organization first you need to save it and then reopen to link locations (or discard and create a new user)</span>} 
    else {<div style="text-align: right; padding: 2px 2px 2px 2px; display: inline;">    
 @if(Model.Count > LocPgSize){ 
     <span>Search: </span><input class="textbox" name="filter" id="filter-box" value="" maxlength="30" type="text" size="10" />
