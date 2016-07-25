@@ -50,7 +50,7 @@
                 @*<u><div title="Click to view this claim" style="height: 99%; cursor: pointer;" data-bind="text:$data.CNo, 
                 click:function(data,event){ gotoClaim($data.ID);return false;}"></div></u>  *@
             <a title="Click to view this claim" data-bind="text:$data.CNo, 
-                attr:{href:'@HttpUtility.UrlDecode(Url.Action("Manage?", "Claim", new {ClaimId = -99 }))'.replace('-99', $data.CNo)}">
+                attr:{href:'@Url.Action("Manage", "Claim", new {ClaimId = -99 })'.replace('-99', $data.CNo)}">
                 </a>
         </td>
         <td align="center" data-bind="text:CDtTxt"></td>

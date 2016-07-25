@@ -78,6 +78,7 @@ namespace CPM.Controllers
         //int AssignedToOLD,
         {            
             bool sendMail = (ClaimID > Defaults.Integer && AssignedTo != _SessionUsr.ID);// No need to send mail if its current user
+            bool selfNotif = !sendMail;
             string msg = sendMail ? "Email queued for new comment" : "Self notification : No email queued";
             try
             {
@@ -91,7 +92,6 @@ namespace CPM.Controllers
             }
             catch (Exception ex) { sendMail = false; msg = ex.Message; }
             HttpContext.Response.Clear(); // to avoid debug email content from rendering !
-            bool selfNotif = !sendMail;
             return Json(new { sendMail, msg, selfNotif }, JsonRequestBehavior.AllowGet);
         }        
     }

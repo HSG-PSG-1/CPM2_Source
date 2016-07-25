@@ -18,9 +18,7 @@ namespace CPM.Services
         public readonly Users emptyUsr = new Users() { ID = Defaults.Integer, 
             UserLocations = new EntitySet<UserLocation>() };//Make sure UserLocations is reset
         public const string sortOn = "UserName ASC", sortOn1 = "UserName ASC"; // Default for secondary sort
-
-        public const string orgTypeJS = "if(user.OrgTypeId() == 1)user.OrgType(\"Internal\"); else if(user.OrgTypeId() == 2)user.OrgType(\"Vendor\");";
-
+                
         #endregion
 
         #region Login related

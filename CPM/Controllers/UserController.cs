@@ -214,7 +214,8 @@ namespace CPM.Controllers
             usr.ID = objUsr.ID; usr.LastModifiedDate = objUsr.LastModifiedDate; 
             usr.LastModifiedBy = objUsr.LastModifiedBy; usr.LastModifiedByName = objUsr.LastModifiedByVal;
             usr.Edited = true; usr.Editing = false;
-            
+            usr.OrgType = ((OrgService.OrgType)usr.OrgTypeId).ToString();
+
             return Json(usr, JsonRequestBehavior.AllowGet);
         }
         

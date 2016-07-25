@@ -217,19 +217,12 @@
     <Content Include="Content\Images\reset.png" />
     <Content Include="Content\Images\search.gif" />
     <Content Include="Content\jQUI\css\images\animated-overlay.gif" />
-    <Content Include="Content\jQUI\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\jQUI\css\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\jQUI\css\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\jQUI\css\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\jQUI\css\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\jQUI\css\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\jQUI\css\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\jQUI\css\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\jQUI\css\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\jQUI\css\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\jQUI\css\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\jQUI\css\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\jQUI\css\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\jQUI\css\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\jQUI\css\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\jQUI\css\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\jQUI\css\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\jQUI\css\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\jQUI\css\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\jQUI\css\jquery-ui.1.12.0.css" />
     <Content Include="Content\jQUI\css\jquery-ui.css" />
     <Content Include="Content\jQUI\min\jquery-2.1.1.min.js" />
@@ -333,7 +326,9 @@
     <Content Include="Views\Dashboard\ClaimDetailsReport.cshtml" />
     <Content Include="Views\Dashboard\Reports.cshtml" />
     <Content Include="Views\Dashboard\Charts.cshtml" />
-    <None Include="Properties\PublishProfiles\Local.pubxml" />
+    <None Include="Content\jQUI\min\jquery-3.1.0.min.map" />
+    <Content Include="Views\Claim\Manage2.cshtml" />
+    <None Include="Properties\PublishProfiles\CubitPC-local.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

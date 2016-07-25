@@ -35,7 +35,7 @@ namespace CPM
             routes.MapRoute("User", "Users/{action}", new { controller = "User", action = "List" });
 
             routes.MapRoute("uploadify", "Claim/{ClaimID}/uploadify.swf", new { controller = "Common", action = "NoAccess" }); 
-            routes.MapRoute("Claim_Default", "Claim/{ClaimID}/{action}", new { controller = "Claim", ClaimID = -1, action = "Manage" });// (default action? because we dpn't want to hide it)
+            routes.MapRoute("Claim_Default", "Claim/{ClaimID}/{action}", new { controller = "Claim", ClaimID = -1, action = "Manage?" });// (default action? because we dpn't want to hide it)
 
             routes.MapRoute("Role", "Roles/{action}", new { controller = "Role", action = "Manage" });
             routes.MapRoute("Master_Default", "Master/Manage/{masterTbl}", new { controller = "Master", action = "Manage"});

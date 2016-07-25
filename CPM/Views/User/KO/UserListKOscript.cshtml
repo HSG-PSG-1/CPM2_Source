@@ -97,11 +97,8 @@ var vmUser = function(){
                     function (usr) {      
                     showDlg(false);                     
                         if(usr == false) {alert("Invalid data or duplicate email."); return;}
-                        @* SQL does it as - CASE o.OrgTypeId WHEN 1 THEN 'Internal' WHEN 2 THEN 'Vendor' END *@
-                        @Html.Raw(UserService.orgTypeJS)
-                        //if(user.OrgTypeId() == 1)user.OrgType("Internal"); else if(user.OrgTypeId() == 2)user.OrgType("Vendor");
-                        //setDDLtext("#ddlRoles", "RoleName"); // shud trigger the change instead of user.RoleName("Admin")
-                        usr.OrgType = user.OrgType();
+                        // Make sure its set properly on server side
+                        //usr.OrgType = user.OrgType;
                         usr.RoleName = $('#ddlRoles option:selected').text(); // SO: 10289721
                         var old;    var usrID = IsEdit ? usr.ID : self.newRecord().ID;                        
                         old = ko.utils.arrayFirst(self.AllUsers(), function (usrObj) {return usrObj.ID() == usrID; });                                 

@@ -25,9 +25,10 @@
         <td>@item.Activity</td>
         <td>@item.UserText</td>
         <td>@item.ActDateTime.ToString(Defaults.dtTFormat, Defaults.ci)</td>
-        <td>@if (!string.IsNullOrEmpty(item.ClaimText)){
+        <td>@if (!string.IsNullOrEmpty(item.ClaimText))
+            {
             @(Html.ActionLink(item.ClaimText, "Manage", "Claim", new { ClaimId = item.ClaimID }, new { @title = "Click to view this claim" }))
-            } 
+            }
         </td>
         <td>@item.FileName
             @if (!string.IsNullOrEmpty(item.FileName) && item.ClaimID.HasValue){ 
