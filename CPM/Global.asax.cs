@@ -44,7 +44,10 @@ namespace CPM
             routes.MapRoute("Master_Manage", "Manage/{masterTbl}", new { controller = "Master", action = "Manage" });
             //routes.MapRoute("Reporting", "Reports/{action}/{reportStr}", new { controller = "Report", action = "Activity" });
 
-            routes.MapRoute("Default","{controller}/{action}/{from}",new { controller = "Common", action = "Login", from = UrlParameter.Optional });
+            /*routes.MapRoute("Default","{controller}/{action}",new { controller = "Common", action = "Login?" }); */
+
+            routes.MapRoute("Default0", "{controller}/{action}/{from}", new { controller = "Common", action = "Login", from = UrlParameter.Optional });
+
             #endregion
         }
 

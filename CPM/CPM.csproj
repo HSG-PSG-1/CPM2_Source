@@ -247,6 +247,9 @@
     <Content Include="Content\Scripts\KO\perpetuum.knockout.js" />
     <Content Include="Content\Scripts\KO\underscore-ko-1.6.0.js" />
     <Content Include="Content\Scripts\KO\underscore.js" />
+    <Content Include="Content\timeout\timeout-dialog.js" />
+    <Content Include="Content\timeout\timeout-dialog.css" />
+    <Content Include="Content\timeout\timeout-icon.png" />
     <Content Include="Content\uploadify\jquery.uploadify.js" />
     <Content Include="Content\uploadify\jquery.uploadify.min.js" />
     <Content Include="Content\uploadify\uploadify-cancel.png" />
@@ -329,6 +332,7 @@
     <None Include="Content\jQUI\min\jquery-3.1.0.min.map" />
     <Content Include="Views\Claim\Manage2.cshtml" />
     <None Include="Properties\PublishProfiles\CubitPC-local.pubxml" />
+    <None Include="Properties\PublishProfiles\Dell-PC.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

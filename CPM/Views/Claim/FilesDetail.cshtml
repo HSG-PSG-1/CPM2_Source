@@ -60,7 +60,7 @@
                                     File
                                 </td>
                                 <td align="left" width="70%" nowrap="nowrap">@* HT : DON'T class="required" because it'll err in edit mode*@
-                                    <input type="file" id="FileDetailNameNEW" name="FileDetailNameNEW" title="@maxFileSizMB" autofocus="autofocus"
+                                    <input type="file" id="FileDetailNameNEW" name="FileDetailNameNEW" title="@maxFileSizMB" multiple="true" autofocus="autofocus"
                                     onchange='var fName = $(this).parent().children("input[type=text]:first");fName.val($(this).val()); fName.trigger("change"); $("#btnFDSubmit").removeAttr("disabled");' />
                                     <span
                                         class="small">@maxFileSizMB</span>

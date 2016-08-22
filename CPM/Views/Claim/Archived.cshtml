@@ -22,6 +22,11 @@
                 }
             });
         });
+
+        function setActiveTab() {
+            var activeTab = $( "#tabs" ).tabs( "option", "active" );
+            $("#activeTab").val(activeTab);
+        }
     </script>
 }
 @{ bool isArchived = claim.Archived; }
@@ -36,7 +41,9 @@
                         {
                             using (Html.BeginForm("Archive", "Claim", new { ClaimID = claim.ID, ClaimGUID = claim.ClaimGUID, Archive = !claim.Archived, ClaimNo = claim.ClaimNo }, FormMethod.Post, new { @style = "display:inline", @onsubmit = "$('#btnUnarchive').prop('disabled', true);" }))
                             { <input type="submit" id="btnUnarchive" value="Unarchive" title="Unarchive this claim"
-               class="button" onclick="if(confirmDeleteM(event, 'Are you sure you want to unarchive this claim?')){skipCommitChk=true;return true;} else return false;" />  }
+               class="button" onclick="if(confirmDeleteM(event, 'Are you sure you want to unarchive this claim?')){skipCommitChk=true; setActiveTab();} else return false;" />
+                        @Html.Hidden("activeTab","0")
+                            }
                         } 
 @* END: Archive*@
                         @Html.Raw("&nbsp;")<input type="button" value="Print" class="button" onclick="javascript:openWin('@Url.Action("Print", "Claim", new { ClaimID = claim.ID })',648,838);" />@Html.Raw("&nbsp;")

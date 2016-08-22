@@ -208,7 +208,7 @@ namespace CPM.Helper
             }
         }
 
-        public static bool IsValid(HttpContext ctx)
+        public static bool IsValid()
         {/*See in future if need more deep validation 
             if (!string.IsNullOrEmpty((ctx.Session["UserObj"] ?? "").ToString()))
                 return (_SessionUsr != new UserService().emptyView);
@@ -354,6 +354,7 @@ namespace CPM.Helper
                         switch (_Enums.ParseEnum<list>(filterID))
                         {
                             case list.Dashboard: filterData = new DashboardService().emptyView; break;
+                            case list.DashboardClaimWithDetails: filterData = new ClaimService().emptyViewCD; break;
                             case list.ActivityLog: filterData = new ActivityLogService(ActivityLogService.Activity.Login).emptyView; break;
                             case list.User: filterData = new UserService().emptyView; break;
                         }
