@@ -93,25 +93,56 @@ namespace CPM.Helper
         public static string delImgForObj(string obj) { return "<img " + delImgPathTitle + " border='0' onclick='return confirmDeleteM(event,\"Are you sure you want to delete this "+ obj + "?\");' />"; }
         public static string delImgForObjKO(string obj)
         {
-            return "<img " + delImgPathTitle + " border='0' class='dDialog' " +
+            return "<img " + delImgPathTitle + " class='dDialog' " +
                 "data-bind='click:function(data,event){if(confirmDeleteM(event,\"Are you sure you want to delete this " + obj + "?\")) $parent.removeSelected($data); return false;}' />";
         }
         public static string delPOSTImg = "<input type='image' " + delImgPathTitle + 
             " border='0' onclick='return confirmDelete(event);' />";
         public static string delImgLink = "<img " + delImgPathTitle + 
             " border='0' onclick=\"javascript:if(confirmDelete(event)){{ {0}; }}\" style='cursor:pointer' />";
-        
-        //public static string delPOSTImgTACO(string txtID, int txtVal) { return delPOSTImgTACO(txtID, txtVal, null); }
-        public static string delPOSTImgTACO(string txtID, int txtVal, string doDelPostFunction = null)
+
+        #region Activate \ deactivate User
+
+        public static string deActivateImgPathTitle = " src='" + contentRoot +
+            "/Images/cancel.png' title='Click here to deactivate' border='0' ";
+        public static string activateImgPathTitle = " src='" + contentRoot +
+            "/Images/reset.png' title='Click here to activate' border='0' ";
+
+        public static string deActivateImgForObjKO(string obj)
+        {
+            return actvDeactvImgForObjKO(obj, deActivateImgPathTitle, false);
+            //return "<img " + deActivateImgPathTitle + " class='dDialog' data-bind='click:function(data,event){if(confirmDeleteM(event,\"Are you sure you want to deactivate this " + obj + "?\")) $parent.deactivateSelected($data,event); return false;}' />";
+        }
+
+        public static string activateImgForObjKO(string obj)
+        {
+            return actvDeactvImgForObjKO(obj, activateImgPathTitle, true);
+        }
+
+        public static string actvDeactvImgForObjKO(string obj, string imgPathTitle, bool Activate)
+        {
+            string actv = Activate ? "activate" : "deactivate";
+            string visible = Activate ? "!" : "";
+            string imgTAG = "<img {0} class='dDialog' data-bind='visible:{1}$data.IsActive(), click:function(data,event)" +
+                "{{if(confirmDeleteM(event,\"Are you sure you want to {2} this {3} ?\")) "+
+                "$parent.toggleActive($data,event); return false;}}' />";
+
+            return string.Format(imgTAG, imgPathTitle, visible, actv, obj);
+        }
+
+        #endregion
+
+        /*public static string delPOSTImgTACO(string txtID, int txtVal, string doDelPostFunction = null)
         {
             return string.Format(delImgLink, ("delTR = this.parentNode.parentNode;$(this).toggle();" + 
                 (doDelPostFunction ?? "doDelPost") + "('" + txtID + "'," + txtVal + ");"));
-        }
-        
+        }*/
+
         #endregion
 
         #region Operation result variables & functions
 
+        public const string oprSuccess = "Operation was successful";
         const string oprMsg =
         "<span id='oprResult'>{0}<span class='error'>{1}</span></span><script>$().ready(function() {{showOprResult('#oprResult',{2});}});</script>";
         //const string oprMsgNOTY = "<eval><![CDATA[<script>$().ready(function() {{showNOTY('{0}{1}',{2});}});</script>]]></eval>";
@@ -120,7 +151,7 @@ namespace CPM.Helper
         public static string getOprResult(bool result, string msg)
         {//Two in one function - displays Opr success else displays opr unsuccessful a well as its err msg (sent as the second arg)
             return string.Format(oprMsgNOTY,
-                result ? "Operation was successful" : "<u>ERROR</u> : ",
+                result ? oprSuccess : "<u>ERROR</u> : ",
                 result ? "" : (msg.Length > 0 ? "<br/>" + msg : ""),
                 result ? "true" : "false");//result?"1":"0");
         }

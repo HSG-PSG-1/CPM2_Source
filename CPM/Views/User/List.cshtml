@@ -25,38 +25,38 @@
                 @* Special case for KO basd dialog editing *@
                 , onfocusout: function (element) { $(element).valid(); }  //SO: 8045731
                 , rules: {
-                    //Email: "required" or required: true, 
+                    //Email: "required" or required: true,
                     Email: {
-                        remote: {
-                            url: '@Url.Action("Validate", "Common", new { src = "UserEmail" })', //, extras=Model.EmailOLD
-                            data: { term: function () {//Remove cached SO: 1564711
-                                @*/*$("#Email").removeData("previousValue");HT:CAUTION - will prevent form submission!
+                            remote: {
+                                url: '@Url.Action("Validate", "Common", new { src = "UserEmail" })', //, extras=Model.EmailOLD
+                                data: { term: function () {//Remove cached SO: 1564711
+                                    @*/*$("#Email").removeData("previousValue");HT:CAUTION - will prevent form submission!
                                 https://github.com/jzaefferer/jquery-validation/issues/58*/
                                 //FIX: SO: 7329125/jquery-validate-remote-is-failing-cant-submit-form*@
-                                return $("#Email").val();
-                            },
-                                extras: function () { return oldEmail;@*$("#EmailOLD").val();*@ }
+                                    return $("#Email").val();
+                                },
+                                    extras: function () { return oldEmail;@*$("#EmailOLD").val();*@ }
+                                }
                             }
                         }
                     }
-                }
             , messages: { Email: { remote: "Duplicate email found"}/*, OrgName: "This field is required."*/ }
-                // the errorPlacement has to take the table layout into account 
+            // the errorPlacement has to take the table layout into account
                 , errorPlacement: function (error, element) {
                     if (element.is(":radio")) error.appendTo(element.parent().next().next());
                     else if (element.is(":checkbox")) error.appendTo(element.next());
                     else error.appendTo(element.parent()); //.next()
                 }
-                //MORE for future: http://docs.jquery.com/Plugins/Validation/validate#options
-                //, invalidHandler: function(form, validator) { alert(validator.numberOfInvalids()); }
-               // For email validation remove this! , @Defaults.validatorJQsetting
-            });        
+            //MORE for future: http://docs.jquery.com/Plugins/Validation/validate#options
+            //, invalidHandler: function(form, validator) { alert(validator.numberOfInvalids()); }
+            // For email validation remove this! , @Defaults.validatorJQsetting
+        });
 
-            @*$('#frmUsr').submit(function () {
+        @*$('#frmUsr').submit(function () {
             if($(this).valid()) { try{DisableSubmitButtons(true);/*$.blockUI();*/;}catch(e){}}
             });*@
 
-        }        
+        }
     </script>
 }
 <table width="100%" border="0">
@@ -65,7 +65,8 @@
             <b class="smallHeading">Manage User</b>
         </td>
         <td align="center" style="width: 98%">
-            <span id="msg">@Html.ValidationSummary(true)<br />
+            <span id="msg">
+                @Html.ValidationSummary(true)<br />
                 <br />
             </span>
         </td>
@@ -80,36 +81,43 @@
         <td colspan="4">
             <fieldset>
                 <legend onclick="showHideDiv('tblSearch')" style="cursor: pointer">&nbsp;<img id="tblSearchImg"
-                    src="@Url.Content("~/Content/Images/aroB.gif")" alt="Show/Hide panel" />
-                    &nbsp;Search&nbsp;</legend>
+                               src="@Url.Content("~/Content/Images/aroB.gif")" alt="Show/Hide panel" />
+                    &nbsp;Search&nbsp;
+                </legend>
                 <div id="tblSearch">
                     <form action="@Url.Content("~/Users/List")" method="post" id="frm" style="display: inline" onsubmit="return doAJAXSubmit(this);">
-                    <table id="tblSearch" cellpadding="2" cellspacing="2" border="0" width="100%">
-                        <tr>
-                            <td nowrap="nowrap" width="5%">
-                                Name
-                            </td>
-                            <td>@Html.TextBox("UserName", usrSearch.UserName, new { @class = "hdrTxt textBox", data_bind = "value:search.UserName", @autofocus = "autofocus" })
-                            </td>
-                            <td nowrap="nowrap" width="5%">
-                                Email
-                            </td>
-                            <td>@Html.TextBox("UserEmail", usrSearch.Email, new { @class = "hdrTxt textBox", data_bind = "value:search.Email" })
-                            </td>
-                            <td nowrap="nowrap" width="5%">
-                                Role
-                            </td>
-                            <td nowrap="nowrap">@Html.DropDownList("RoleID", new SelectList((IEnumerable)ViewData["Roles"], "ID", "TEXT", usrSearch.RoleID),
-                 "All Roles", new { @class = "dropDown", data_bind = "value:search.RoleID" })
-                            </td>
-                            <td nowrap="nowrap" align="right" colspan="6">
-                                <input type="submit" onclick="return doAJAXSubmit(this);" value="Search" class="button" />
-                                &nbsp;
-                                <input type="submit" value="Reset" class="button" onclick="resetForm(this);" />
-                                <input type="checkbox" name="doReset" id="doReset" style="display: none;" />
-                            </td>
-                        </tr>
-                    </table>
+                        <table id="tblSearch" cellpadding="2" cellspacing="2" border="0" width="100%">
+                            <tr>
+                                <td nowrap="nowrap" width="5%">Name
+                                </td>
+                                <td>
+                                    @Html.TextBox("UserName", usrSearch.UserName, new { @class = "hdrTxt textBox", data_bind = "value:search.UserName", @autofocus = "autofocus" })
+                                </td>
+                                <td nowrap="nowrap" width="5%">Email
+                                </td>
+                                <td>
+                                    @Html.TextBox("UserEmail", usrSearch.Email, new { @class = "hdrTxt textBox", data_bind = "value:search.Email" })
+                                </td>
+                                <td nowrap="nowrap" width="5%">Role
+                                </td>
+                                <td nowrap="nowrap">
+                                    @Html.DropDownList("RoleID", new SelectList((IEnumerable)ViewData["Roles"], "ID", "TEXT", usrSearch.RoleID), "All Roles", new { @class = "dropDown", data_bind = "value:search.RoleID" })
+                                </td>
+                                <td nowrap="nowrap" align="right" colspan="6">
+                                    <input type="submit" onclick="return doAJAXSubmit(this);" value="Search" class="button" />
+                                    &nbsp;
+                                    <input type="submit" value="Reset" class="button" onclick="resetForm(this);" />
+                                    <input type="checkbox" name="doReset" id="doReset" style="display: none;" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6"></td>
+                                <td width="5%" nowrap="nowrap"  style="text-align:right">Show  active users</td>
+                                <td nowrap="nowrap" style="text-align:right">
+                                    @Html.CheckBox("IsActive", usrSearch.IsActive, new { data_bind = "checked:search.IsActive" })
+                                </td>
+                            </tr>
+                        </table>
                     </form>
                 </div>
             </fieldset>
@@ -127,143 +135,138 @@
 </table>
 <div id="usrAddEditDialog" data-bind="if: editRecord() != null && editRecord().length > 0"
     title="Edit User" style="padding: 0px 0px 0px 0px;">
-    <form id="frmUsr" name="frmUsr" action="@Url.Action("AddEdit")" method="post" 
-    onsubmit1="if($(this).valid())$('#btnSubmit').prop('disabled', true); return false;">
-    <table align="center" data-bind="with: editRecord()[0]" width="99%" style="padding: 0px 0px 0px 0px;"
-        id="tblUsrAddEdit">
-        <tr>
-            <td>
-                <table border="0" cellpadding="4" cellspacing="4" align="center" width="100%">
-                    <thead class="header">
-                        <th>
-                            <b class="smallHeading"><span data-bind="html: $parent.opr()"></span>&nbsp;User</b>
-                            @*Loc Link \ Unlink data*@
-                            <input style="display:none" id="UnlinkedLoc" name="UnlinkedLoc" type="text" value="@Html.Raw((ViewData["UnlinkedLoc"] ?? "").ToString())" />
-                            <input style="display:none" id="LinkedLoc" name="LinkedLoc" type="text" value="@Html.Raw((ViewData["LinkedLoc"] ?? "").ToString())" />
-                            @*Loc Link \ Unlink data*@
-                        </th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div id="errors">
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div id="tabs">
-                                    <ul>
-                                        <li><a href="#Details"><span>Details</span></a></li>
-                                        <li><a href="#Locations"><span>Locations</span></a></li>
-                                    </ul>
-                                    <div id="Details">
-                                        <table cellpadding="2" cellspacing="2" id="tblUsrAddEdit" border="0">
-                                            <tr>
-                                                <td class="rtsqz">
-                                                    Name :
-                                                </td>
-                                                <td colspan="3">
-                                                    <input type="text" data-bind="value:UserName" name="Name" maxlength="50" id="Name"
-                                                        class="required valid" autofocus="autofocus" />&nbsp;
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="rtsqz">
-                                                    Role :
-                                                </td>
-                                                <td>
-                                                    <select id="ddlRoles" class="dropDown required" data-bind="options: $parent.roles, value:RoleID, optionsText: 'TEXT', optionsValue:'ID'"
-                                                        onchange="fillOrgs(true);">
-                                                    </select>&nbsp;
-                                                    <input class="ignore" id="OrgTypeId" name="OrgTypeId" type="hidden" data-bind="value:OrgTypeId" />
-                                                </td>
-                                                <td align="right" class="tdSalesperson">
-                                                    Salesperson Code :
-                                                </td>
-                                                <td class="tdSalesperson">
-                                                    <!-- ko if: $parent.hasbeenSalesperson() -->
-                                                    @* Make it readonly for existing SPSN *@
-                                                    <input type="text" data-bind="value:SalespersonCode" name="SalespersonCode" maxlength="6"
-                                                        id="SalespersonCode" disabled="disabled" style="width: 100px;" />
-                                                    <input type="hidden" data-bind="value:SalespersonCode" name="SalespersonCode" maxlength="6"
-                                                        id="SalespersonCode" />
-                                                    @*Html.HiddenFor(u => u.SalespersonCode)*@
-                                                    <!-- /ko -->
-                                                    <!-- ko ifnot: $parent.hasbeenSalesperson() -->
-                                                    <input type="text" data-bind="value:SalespersonCode" name="SalespersonCode" maxlength="6"
-                                                        id="SalespersonCode" style="width: 100px;" />&nbsp;
-                                                    <!-- /ko -->
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="rtsqz">
-                                                    Organization :
-                                                </td>
-                                                <td colspan="3">
-                                                    <input class="required" type="text" data-bind="value:OrgName" style="width: 250px" onblur="showHideLocations();" name="OrgName" id="OrgName" autocomplete="off" />&nbsp;&nbsp;@Html.Raw(string.Format(Defaults.lookupImgBtn, "OrgName"))
-                                                    <input id="OrgID" name="OrgID" type="text" data-bind="value:OrgID" />
-                                                    @*<input type="text" data-bind="value:OriOrgId" name="OriOrgId" id="OriOrgId" />*@
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="rtsqz">
-                                                    Email :
-                                                </td>
-                                                <td colspan="3">
-                                                    <input type="text" style="width: 200px" name="Email" maxlength="80" id="Email" class="email required valid"
-                                                        data-bind="value:Email" />&nbsp; @* Can't keep EmailOld because KO will update both! *@
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="rtsqz">
-                                                    Password :
-                                                </td>
-                                                <td colspan="3">
-                                                    <input class="required" id="Password" maxlength="20" name="Password" type="text"
-                                                        data-bind="value:Password" />&nbsp;
-                                                </td>
-                                            </tr>
-                                            <!-- ko if: $parent.opr() == "Edit" -->
-                                            <tr>
-                                                <td colspan="4" nowrap="nowrap" align="center">
-                                                    <i>Last Modified By : <span data-bind="html:LastModifiedByName"></span>&nbsp; (<span
-                                                        data-bind="html:LastModifiedDateTxt"></span>) </i>
-                                                </td>
-                                            </tr>
-                                            <!-- /ko -->
-                                            <tr>
-                                                <td colspan="4" align="center">
-                                                    <img src="@Url.Content("~/Content/Images/spacer.gif")" height="1px" width="600px" /><br />
-                                                    <input id="btnSubmit" type="button" data-bind="click:$parent.saveEdit" value="Save"
-                                                        class="button" />
-                                                    <input id="btnReset" data-bind="click:$parent.cancelEdit" type="reset" value="Cancel"
-                                                        class="button" />
-                                                </td>
-                                            </tr>
-                                        </table>
+    <form id="frmUsr" name="frmUsr" action="@Url.Action("AddEdit")" method="post"
+          onsubmit1="if($(this).valid())$('#btnSubmit').prop('disabled', true); return false;">
+        <table align="center" data-bind="with: editRecord()[0]" width="99%" style="padding: 0px 0px 0px 0px;"
+            id="tblUsrAddEdit">
+            <tr>
+                <td>
+                    <table border="0" cellpadding="4" cellspacing="4" align="center" width="100%">
+                        <thead class="header">
+                            <th>
+                                <b class="smallHeading"><span data-bind="html: $parent.opr()"></span>&nbsp;User</b>
+                                @*Loc Link \ Unlink data*@
+                                <input style="display:none" id="UnlinkedLoc" name="UnlinkedLoc" type="text" value="@Html.Raw((ViewData["UnlinkedLoc"] ?? "").ToString())" />
+                                <input style="display:none" id="LinkedLoc" name="LinkedLoc" type="text" value="@Html.Raw((ViewData["LinkedLoc"] ?? "").ToString())" />
+                                @*Loc Link \ Unlink data*@
+                            </th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div id="errors">
                                     </div>
-                                    <div id="Locations">
-                                        <div id="tbLocations" style="height: 230px;overflow: auto">
-                                            @*Try- http://weblogs.asp.net/nmarun/archive/2010/03/13/asp-net-mvc-2-model-binding-for-a-collection.aspx
-                        Not working? SO: 3843209/why-isnt-mvc-binding-my-nested-collection
-                        @Html.EditorFor(model => model.UserLocations, "UserLocation")   *@ @*WORKING: SO: 5436639/asp-mvc-how-to-create-editor-for-model-which-have-children-elements -@Html.RenderPartial("UserLocation", Model.UserLocations);*@
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="tabs">
+                                        <ul>
+                                            <li><a href="#Details"><span>Details</span></a></li>
+                                            <li><a href="#Locations"><span>Locations</span></a></li>
+                                        </ul>
+                                        <div id="Details">
+                                            <table cellpadding="2" cellspacing="2" id="tblUsrAddEdit" border="0">
+                                                <tr>
+                                                    <td class="rtsqz">Name :
+                                                    </td>
+                                                    <td colspan="3">
+                                                        <input type="text" data-bind="value:UserName" name="Name" maxlength="50" id="Name"
+                                                            class="required valid" autofocus="autofocus" />&nbsp;
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="rtsqz">Role :
+                                                    </td>
+                                                    <td>
+                                                        <select id="ddlRoles" class="dropDown required" data-bind="options: $parent.roles, value:RoleID, optionsText: 'TEXT', optionsValue:'ID'"
+                                                            onchange="fillOrgs(true);">
+                                                        </select>&nbsp;
+                                                        <input class="ignore" id="OrgTypeId" name="OrgTypeId" type="hidden" data-bind="value:OrgTypeId" />
+                                                    </td>
+                                                    <td align="right" class="tdSalesperson">Salesperson Code :
+                                                    </td>
+                                                    <td class="tdSalesperson">
+                                                        <!-- ko if: $parent.hasbeenSalesperson() -->
+                                                        @* Make it readonly for existing SPSN *@
+                                                        <input type="text" data-bind="value:SalespersonCode" name="SalespersonCode" maxlength="6"
+                                                            id="SalespersonCode" disabled="disabled" style="width: 100px;" />
+                                                        <input type="hidden" data-bind="value:SalespersonCode" name="SalespersonCode" maxlength="6"
+                                                            id="SalespersonCode" />
+                                                        @*Html.HiddenFor(u => u.SalespersonCode)*@
+                                                        <!-- /ko -->
+                                                        <!-- ko ifnot: $parent.hasbeenSalesperson() -->
+                                                        <input type="text" data-bind="value:SalespersonCode" name="SalespersonCode" maxlength="6"
+                                                            id="SalespersonCode" style="width: 100px;" />&nbsp;
+                                                        <!-- /ko -->
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="rtsqz">Organization :
+                                                    </td>
+                                                    <td colspan="3">
+                                                        <input class="required" type="text" data-bind="value:OrgName" style="width: 250px" onblur="showHideLocations();" name="OrgName" id="OrgName" autocomplete="off" />&nbsp;&nbsp;@Html.Raw(string.Format(Defaults.lookupImgBtn, "OrgName"))
+                                                        <input id="OrgID" name="OrgID" type="text" data-bind="value:OrgID" />
+                                                        @*<input type="text" data-bind="value:OriOrgId" name="OriOrgId" id="OriOrgId" />*@
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="rtsqz">Email :
+                                                    </td>
+                                                    <td colspan="3">
+                                                        <input type="text" style="width: 200px" name="Email" maxlength="80" id="Email" class="email required valid"
+                                                            data-bind="value:Email" />&nbsp; @* Can't keep EmailOld because KO will update both! *@
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="rtsqz">Password :
+                                                    </td>
+                                                    <td colspan="3">
+                                                        <input class="required" id="Password" maxlength="20" name="Password" type="text"
+                                                            data-bind="value:Password" />&nbsp;
+                                                    </td>
+                                                </tr>
+                                                <!-- ko if: $parent.opr() == "Edit" -->
+                                                <tr>
+                                                    <td colspan="4" nowrap="nowrap" align="center">
+                                                        <i>Last Modified By : <span data-bind="html:LastModifiedByName"></span>&nbsp; (<span data-bind="html:LastModifiedDateTxt"></span>)
+                                                        </i>
+                                                    </td>
+                                                </tr>
+                                                <!-- /ko -->
+                                                <tr>
+                                                    <td colspan="4" align="center">
+                                                        <img src="@Url.Content("~/Content/Images/spacer.gif")" height="1px" width="600px" /><br />
+                                                        <input id="btnSubmit" type="button" data-bind="click:$parent.saveEdit" value="Save"
+                                                            class="button" />
+                                                        <input id="btnReset" data-bind="click:$parent.cancelEdit" type="reset" value="Cancel"
+                                                            class="button" />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div id="Locations">
+                                            <div id="tbLocations" style="height: 230px; overflow: auto">
+                                                @*Try- http://weblogs.asp.net/nmarun/archive/2010/03/13/asp-net-mvc-2-model-binding-for-a-collection.aspx
+                                                        Not working? SO: 3843209/why-isnt-mvc-binding-my-nested-collection
+                                                        @Html.EditorFor(model => model.UserLocations, "UserLocation")   *@ @*WORKING: SO: 5436639/asp-mvc-how-to-create-editor-for-model-which-have-children-elements -@Html.RenderPartial("UserLocation", Model.UserLocations);*@
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
     </form>
 </div>
-<script type="text/javascript" id="mailToCellTemplate">   
-var mailToCellTemplate = 
-'<u><a data-bind="attr:{href:\'javascript:MailTo(\' + \'\\\'\' + $parent.entity[\'Email\'] + \'\\\'\' + \')\'}, text: $parent.entity[\'Email\']"></a></u>';
-@*'<div data-bind="attr:{'href'},html: $data.getProperty($parent)"></div>';
+<script type="text/javascript" id="mailToCellTemplate">
+
+    var mailToCellTemplate =
+    '<u><a data-bind="attr:{href:\'javascript:MailTo(\' + \'\\\'\' + $parent.entity[\'Email\'] + \'\\\'\' + \')\'}, text: $parent.entity[\'Email\']"></a></u>';
+    @*'<div data-bind="attr:{'href'},html: $data.getProperty($parent)"></div>';
 <div data-bind=" attr: { 'class': 'kgCellText colt' + $index()} }, html: $data.getProperty($parent)"></div>
 <a data-bind="attr: { 'href': 'mailto:' + $data.getProperty($parent)}, html: $data.getProperty($parent)">
 hmnt</a>*@
@@ -281,7 +284,7 @@ hmnt</a>*@
     }
     var userListModel = function () {
         var self = this;
-        self.AllUsers = ko.observableArray(); // Initial items        
+        self.AllUsers = ko.observableArray(); // Initial items
         self.removeSelected = function (user) {
             if (user != null) // Prevent blanks and duplicates
                 self.AllUsers.remove(user);
@@ -290,197 +293,198 @@ hmnt</a>*@
 
     var vm_U = new vmUser();
     var ListURL = '@Html.Raw(Url.Action("UsersKOVM", "User"))';
-    function createKO() {
-    showDlg(true);
-        $.getJSON(ListURL, function (data) {
-        showDlg(false);
-            @*vm_U.fields(data.records);
-            vm_U.search = ko.mapping.fromJS(data.search); // Otherwise the search button will be needed            
+            function createKO() {
+                showDlg(true);
+                $.getJSON(ListURL, function (data) {
+                    showDlg(false);
+                    @*vm_U.fields(data.records);
+            vm_U.search = ko.mapping.fromJS(data.search); // Otherwise the search button will be needed
             vm_U.invokeSearch(2);
             ko.applyBindings(vm_U);*@
-            
-            vm_U.AllUsers = ko.mapping.fromJS(data.AllUsers);
-            vm_U.search = ko.mapping.fromJS(data.Search); // Otherwise the search button will be needed            
-            vm_U.newRecord = ko.observable(data.NewRecord);//ko.mapping.fromJS();
-            vm_U.roles(data.Roles);
 
-            vm_U.invokeSearch(2);
+                    vm_U.AllUsers = ko.mapping.fromJS(data.AllUsers);
+                    vm_U.search = ko.mapping.fromJS(data.Search); // Otherwise the search button will be needed
+                    vm_U.newRecord = ko.observable(data.NewRecord);//ko.mapping.fromJS();
+                    vm_U.roles(data.Roles);
 
-            ko.applyBindings(vm_U);
-        });
-        //reset the function to handle callback
-        doFurtherProcessing = function () {
-            if (usrIDToDel == null) return;
-            var match = ko.utils.arrayFirst(vm_U.AllUsers(), function (usr) { return usrIDToDel == usr.ID; });
-            if (match != null)
-                vm_U.AllUsers.remove(match);
-            usrIDToDel = null;
-        }
-    }
-    
-    var MailTo = function (data) {
-        showNOTY("Send mail to : " + data, true);
-        //Try this while using external KO template: https://groups.google.com/forum/#!msg/knockoutjs/1WDUJNd-VQ0/SBVuJttE91UJ
-    }
-    
-    var skipCommitChk = false;
-    var DataURL = '@Html.Raw(Url.Action("SetSearchOpts", "User"))'; @*POUserList*@
-    $().ready(function () {
-        $("#tblSearch").tableNav();        
-        @*//bind event to check claim commit*@
-        window.onbeforeunload = function(e){            
-               if(skipCommitChk){skipCommitChk = false; return;}
-                $.ajax({
-                type: "POST",
-                //contentType: "application/json; charset=utf-8",
-                //dataType: "json",
-                data: ko.mapping.toJS(vm_U.search),// $("#frm").serialize(),
-                url: DataURL
-                ,async : false // SO: 14645011 (for FF to ensure the postback is not            
-            });           
-        };
-        
-        $("#usrAddEditDialog").dialog({
-            modal: true,
-            autoOpen: false,
-            height: 400,
-            width: 700,
-            open: function (event, ui) {                
-                renderUserEditTab(); @* Make sure this is first *@
-                if (validator == null) { } setupValidation(); fillOrgs(false);
-                $(".ui-dialog-titlebar-close").hide(); /* SO: 896777, 12901102 */                
-                $(".ui-dialog-titlebar").hide();
-                $("#tblUsrAddEdit").tableNav();                
-            }, /* called after focus - when the frmUsr is available */
-            close: function (event, ui) { vm_U.showGrid(true); },
-            closeOnEscape: false
-        });//.dialog("widget").find(".ui-dialog-title").hide();​ // SO: 13283108
-        
-        createKO();
-    });
+                    vm_U.invokeSearch(2);
 
-    function resetForm(btn) 
-    {
-        clearForm(document.getElementById('frm'));
-        document.getElementById('doReset').checked = true;
-        resetDatepicker('#ClaimDateFrom1, #ClaimDateTo1');
+                    ko.applyBindings(vm_U);
+                });
+                //reset the function to handle callback
+                doFurtherProcessing = function () {
+                    if (usrIDToDel == null) return;
+                    var match = ko.utils.arrayFirst(vm_U.AllUsers(), function (usr) { return usrIDToDel == usr.ID; });
+                    if (match != null)
+                        vm_U.AllUsers.remove(match);
+                    usrIDToDel = null;
+                }
+            }
 
-        //trigger changeClaimStatusPost for KO binding notification
-        vm_U.search.Email(null);
-        vm_U.search.RoleID(0);
-        vm_U.search.RoleName(null);
-        vm_U.search.UserName(null);
-        vm_U.search.OrgType(null);        
-    }
-        //showHideLocations(false);//Disable Locations tab until a valid Customer Org is selected    
+            var MailTo = function (data) {
+                showNOTY("Send mail to : " + data, true);
+                //Try this while using external KO template: https://groups.google.com/forum/#!msg/knockoutjs/1WDUJNd-VQ0/SBVuJttE91UJ
+            }
+
+            var skipCommitChk = false;
+            var DataURL = '@Html.Raw(Url.Action("SetSearchOpts", "User"))'; @*POUserList*@
+            $().ready(function () {
+                $("#tblSearch").tableNav();
+                @*//bind event to check claim commit*@
+                window.onbeforeunload = function(e){
+                    if(skipCommitChk){skipCommitChk = false; return;}
+                    $.ajax({
+                        type: "POST",
+                        //contentType: "application/json; charset=utf-8",
+                        //dataType: "json",
+                        data: ko.mapping.toJS(vm_U.search),// $("#frm").serialize(),
+                        url: DataURL
+                    ,async : false // SO: 14645011 (for FF to ensure the postback is not
+                    });
+                };
+
+                $("#usrAddEditDialog").dialog({
+                    modal: true,
+                    autoOpen: false,
+                    height: 400,
+                    width: 700,
+                    open: function (event, ui) {
+                        renderUserEditTab(); @* Make sure this is first *@
+                        if (validator == null) { } setupValidation(); fillOrgs(false);
+                        $(".ui-dialog-titlebar-close").hide(); /* SO: 896777, 12901102 */
+                        $(".ui-dialog-titlebar").hide();
+                        $("#tblUsrAddEdit").tableNav();
+                    }, /* called after focus - when the frmUsr is available */
+                    close: function (event, ui) { vm_U.showGrid(true); },
+                    closeOnEscape: false
+                });//.dialog("widget").find(".ui-dialog-title").hide();​ // SO: 13283108
+
+                createKO();
+            });
+
+                function resetForm(btn)
+                {
+                    clearForm(document.getElementById('frm'));
+                    document.getElementById('doReset').checked = true;
+                    resetDatepicker('#ClaimDateFrom1, #ClaimDateTo1');
+
+                    //trigger changeClaimStatusPost for KO binding notification
+                    vm_U.search.Email(null);
+                    vm_U.search.RoleID(0);
+                    vm_U.search.RoleName(null);
+                    vm_U.search.UserName(null);
+                    vm_U.search.OrgType(null);
+                    vm_U.search.IsActive(true);
+                }
+                //showHideLocations(false);//Disable Locations tab until a valid Customer Org is selected
 </script>
 <script type="text/javascript">
-        function checkReq1(ctrl, impactCtrl) { if (!(ctrl.value.length > 0)) $("#" + impactCtrl).val(''); }
+    function checkReq1(ctrl, impactCtrl) { if (!(ctrl.value.length > 0)) $("#" + impactCtrl).val(''); }
 
-        function fillOrgs(reset) {
-            //var ddl = document.getElementById("ddlRoles");
-            //var pos = (ddl.selectedIndex > 0)?ddl.selectedIndex:0;
-            
-            doOrgsDDL($("#ddlRoles").val(), reset);//refresh Orgs dll(ddl.options[pos].value)
-            showSalesperson();//show or hide sp row
-        }
+    function fillOrgs(reset) {
+        //var ddl = document.getElementById("ddlRoles");
+        //var pos = (ddl.selectedIndex > 0)?ddl.selectedIndex:0;
 
-        function doOrgsDDL(RoleId, reset) {
-            if (reset) { $("#OrgID").val(''); $("#OrgName").val(''); }
-            var urlPath = "@Defaults.commonRoot/Lookup?id=@LookupService.Source.Org.ToString()" + 
-            "&extras=" + RoleId;
-            var idBox = "#OrgID", txtBox = "#OrgName";
-            renderAutoComplete(urlPath, idBox, txtBox);//refresh the autocomplete
-            //Need to have a custom select
-            $(txtBox).bind( "autocompleteselect", function(event, ui) {
-                //set value if a valid item is selected
-                if (ui.item.id == null) { event.preventDefault(); } 
-                else
-                {
-                    log(ui.item, idBox);
-                    $("#OrgTypeId").val(ui.item.OrgTypeId).trigger("change");
-                    // HT:: Need to set OrgTypeText
-                }
-            });
-            
-            showHideLocations();//Set false if want to Disable Locations tab until a valid Customer Org is selected
-        }
-        
-        //Caching: http://developwithstyle.com/articles/2010/05/14/jquery-ui-autocomplete-is-it-any-good.html
-        
-        function renderUserEditTab()
-        {
-            //HT: DON'T use or it'll create tab without any of the following settings -
-            // if($("#tabs").tabs().length > 0) return;
+        doOrgsDDL($("#ddlRoles").val(), reset);//refresh Orgs dll(ddl.options[pos].value)
+        showSalesperson();//show or hide sp row
+    }
 
-            $("#tabs").tabs({ 
-                /* 
-                @*cache: true, spinner: 'Loading...', ajaxOptions: { cache: false }, 
+    function doOrgsDDL(RoleId, reset) {
+        if (reset) { $("#OrgID").val(''); $("#OrgName").val(''); }
+        var urlPath = "@Defaults.commonRoot/Lookup?id=@LookupService.Source.Org.ToString()" +
+                "&extras=" + RoleId;
+                var idBox = "#OrgID", txtBox = "#OrgName";
+                renderAutoComplete(urlPath, idBox, txtBox);//refresh the autocomplete
+                //Need to have a custom select
+                $(txtBox).bind( "autocompleteselect", function(event, ui) {
+                    //set value if a valid item is selected
+                    if (ui.item.id == null) { event.preventDefault(); }
+                    else
+                    {
+                        log(ui.item, idBox);
+                        $("#OrgTypeId").val(ui.item.OrgTypeId).trigger("change");
+                        // HT:: Need to set OrgTypeText
+                    }
+                });
+
+                showHideLocations();//Set false if want to Disable Locations tab until a valid Customer Org is selected
+            }
+
+            //Caching: http://developwithstyle.com/articles/2010/05/14/jquery-ui-autocomplete-is-it-any-good.html
+
+            function renderUserEditTab()
+            {
+                //HT: DON'T use or it'll create tab without any of the following settings -
+                // if($("#tabs").tabs().length > 0) return;
+
+                $("#tabs").tabs({
+                    /*
+                    @*cache: true, spinner: 'Loading...', ajaxOptions: { cache: false },
                 http://jqueryui.com/upgrade-guide/1.9/#deprecated-ajaxoptions-and-cache-options-added-beforeload-event *@ */
-            beforeLoad: function( event, ui ) {
-                ui.ajaxSettings.cache = false;
-                if ( ui.tab.data( "loaded" ) ) {  event.preventDefault();  return;  } 
-                ui.jqXHR.done(function() {   ui.tab.data( "loaded", true ); });
-               },
-            activate: function(event, ui) { setFocusUserEditFocus(event, ui) },
-            @* as its an ajax tab this will be triggerred only once 
-            beforeActivate: function(e, ui) { return showHideLocations(true); } *@           
-            });
-        }
-        
-        function setFocusUserEditFocus(evt, ui) {            
-            @* HT: http://jqueryui.com/upgrade-guide/1.9/#tabs
+                    beforeLoad: function( event, ui ) {
+                        ui.ajaxSettings.cache = false;
+                        if ( ui.tab.data( "loaded" ) ) {  event.preventDefault();  return;  }
+                        ui.jqXHR.done(function() {   ui.tab.data( "loaded", true ); });
+                    },
+                    activate: function(event, ui) { setFocusUserEditFocus(event, ui) },
+                    @* as its an ajax tab this will be triggerred only once
+            beforeActivate: function(e, ui) { return showHideLocations(true); } *@
+                });
+            }
+
+    function setFocusUserEditFocus(evt, ui) {
+                @* HT: http://jqueryui.com/upgrade-guide/1.9/#tabs
             // Panel that is currently active, about to be deactivated
                 ui.oldPanel// Tab associated with the currently active panel
                 ui.oldTab// Panel that is about to be activated : CHANGED (previously panel)
                 ui.newPanel// Tab associated with the panel that is about to be activated : CHANGED (previously tab)
                 ui.newTab// Index can be calculated if needed
                 ui.newTab.index()
-            *@            
-            switch (ui.newTab.index()) {
-                case 0: //Details
-                    setFocus("Name"); break;
-                case 1: //Locations
-                    var OrgID = $("#OrgID").val();
-                    var usr = vm_U.editRecord()[0];                    
-                    var url = "User/UserLocation?UserId=" + usr.ID() + "&CustOrgId=" + OrgID + "&OriCustOrgId=" + usr.OrgID();
-                    //Special function to execute callback                     
-                    reload(url, url, "#tbLocations");
-                    //setFocus("[0].IsLinked"); - not needed any more, try here if needed in future
-                    break;
+            *@
+                switch (ui.newTab.index()) {
+                    case 0: //Details
+                        setFocus("Name"); break;
+                    case 1: //Locations
+                        var OrgID = $("#OrgID").val();
+                        var usr = vm_U.editRecord()[0];
+                        var url = "User/UserLocation?UserId=" + usr.ID() + "&CustOrgId=" + OrgID + "&OriCustOrgId=" + usr.OrgID();
+                        //Special function to execute callback
+                        reload(url, url, "#tbLocations");
+                        //setFocus("[0].IsLinked"); - not needed any more, try here if needed in future
+                        break;
+                }
             }
-        }
-        
-    function showHideLocations() {
-        var OrgID = $("#OrgID").val();
-        var IsOrgTypeCustomer = ($("#OrgTypeId").val() == '@((int)OrgService.OrgType.Customer)');
-        //Verify that a customer is selected
-        var show = @*show && *@IsOrgTypeCustomer && (OrgID != null && OrgID.length > 0);
-        //show/hide
-        if($("#tabs").tabs().length > 0)
-        {
-            if (show) $("#tabs").tabs("enable", 1);
-            else $("#tabs").tabs("disable", 1);            
-        }
-        return show;//for tab select event
-    }
-        
-        function showSalesperson()
-        {
-            var IsOrgTypeSales = ($("#ddlRoles").val() == '@((int)SecurityService.Roles.Sales)');
-            var tdSP = $(".tdSalesperson");
-            
-            if(IsOrgTypeSales)  tdSP.show();
-            else                tdSP.hide();
-        }
-        
-        function LinkUnlinkLoc(chk){        
-        var txt1 = chk.checked?"#LinkedLoc":"#UnlinkedLoc";
-        var txt2 = chk.checked?"#UnlinkedLoc": "#LinkedLoc";
-        // add only if it didn't exist & remove only if it exists
-        if(chk.getAttribute("WasLinked").toLowerCase() != chk.checked.toString())
-            $(txt1).val($(txt1).val() + "," + chk.value);
-        //Empty the other textbox
-        $(txt2).val($(txt2).val().replace("," + chk.value,""));
-        }       
+
+            function showHideLocations() {
+                var OrgID = $("#OrgID").val();
+                var IsOrgTypeCustomer = ($("#OrgTypeId").val() == '@((int)OrgService.OrgType.Customer)');
+                //Verify that a customer is selected
+                var show = @*show && *@IsOrgTypeCustomer && (OrgID != null && OrgID.length > 0);
+                //show/hide
+                if($("#tabs").tabs().length > 0)
+                {
+                    if (show) $("#tabs").tabs("enable", 1);
+                    else $("#tabs").tabs("disable", 1);
+                }
+                return show;//for tab select event
+            }
+
+            function showSalesperson()
+            {
+                var IsOrgTypeSales = ($("#ddlRoles").val() == '@((int)SecurityService.Roles.Sales)');
+                var tdSP = $(".tdSalesperson");
+
+                if(IsOrgTypeSales)  tdSP.show();
+                else                tdSP.hide();
+            }
+
+            function LinkUnlinkLoc(chk){
+                var txt1 = chk.checked?"#LinkedLoc":"#UnlinkedLoc";
+                var txt2 = chk.checked?"#UnlinkedLoc": "#LinkedLoc";
+                // add only if it didn't exist & remove only if it exists
+                if(chk.getAttribute("WasLinked").toLowerCase() != chk.checked.toString())
+                    $(txt1).val($(txt1).val() + "," + chk.value);
+                //Empty the other textbox
+                $(txt2).val($(txt2).val().replace("," + chk.value,""));
+            }
 </script>

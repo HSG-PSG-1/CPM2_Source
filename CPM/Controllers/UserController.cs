@@ -147,6 +147,46 @@ namespace CPM.Controllers
                 Defaults.getOprResult(proceed, err), null, true), "text/xml");*/
         }
 
+        [HttpPost]
+        public JsonResult UserKOToggleActivate([FromJson] vw_Users_Role_Org user)
+        {
+            Users objUsr = UserService.GetObjFromVW(user);
+
+            bool proceed = false; string msg = Defaults.oprSuccess; int result = 2;
+            bool isReferred = user.IsActive && new UserService().IsReferred(objUsr);//If user being deleted is referred still need to deactivate
+
+            if (isReferred)
+            {msg = UserService.delRefChkMsg; result = 1;}
+
+            proceed = !user.IsActive || !(objUsr.ID == _SessionUsr.ID); // Self delete
+            
+            if (!proceed) {msg = "Cannot delete your own record!";result = 0;}
+
+            try
+            {
+
+
+                Users usr = new Users() { ID = -1 };
+                if (proceed) // NOT deleted because testing
+                {//Delete & Log Activity
+                    usr = new UserService().ToggleActive(objUsr);
+
+                    if (user.IsActive)
+                        new ActivityLogService(ActivityLogService.Activity.UserDelete).Add();
+                    else
+                        new ActivityLogService(ActivityLogService.Activity.UserEdit).Add();
+                }
+                proceed = usr.ID > -1; // ensure that the object was updated successfully
+                user = UserService.UpdVWfromObj(usr, user);
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message + " " + (ex.InnerException ?? new Exception()).Message;
+                result = 0;
+            }
+            return Json(new { msg = msg, result = result, usr = user },
+                JsonRequestBehavior.AllowGet);                
+        }
         #endregion
 
         #region Customer Location GET (for AJAX)
@@ -206,15 +246,21 @@ namespace CPM.Controllers
             
             int UserEmailCount = new UserService().UserEmailCount(usr.Email);
             bool isEdit = usr.ID > 0;
+            
             if((isEdit && UserEmailCount > 1) || (!isEdit && UserEmailCount > 0))
                 return Json(false, JsonRequestBehavior.AllowGet);            
+            
             Users objUsr = UserService.GetObjFromVW(usr);
+            
             int result = new UserService().AddEdit(objUsr, LinkedLoc, UnlinkedLoc);
             new ActivityLogService(isEdit ? ActivityLogService.Activity.UserEdit : ActivityLogService.Activity.UserAdd).Add();
-            usr.ID = objUsr.ID; usr.LastModifiedDate = objUsr.LastModifiedDate; 
+            
+            /*usr.ID = objUsr.ID; usr.LastModifiedDate = objUsr.LastModifiedDate; 
             usr.LastModifiedBy = objUsr.LastModifiedBy; usr.LastModifiedByName = objUsr.LastModifiedByVal;
-            usr.Edited = true; usr.Editing = false;
-            usr.OrgType = ((OrgService.OrgType)usr.OrgTypeId).ToString();
+            usr.Edited = true; usr.Editing = false;*/
+            usr.OrgType = ((OrgService.OrgType)usr.OrgTypeId).ToString(); 
+
+            UserService.UpdVWfromObj(objUsr, usr);
 
             return Json(usr, JsonRequestBehavior.AllowGet);
         }

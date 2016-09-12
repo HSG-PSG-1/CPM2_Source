@@ -131,6 +131,50 @@ var vmUser = function(){
                     }
             );
         };
+    self.toggleActive = function (user, event, deactivate) {
+        if (user == null || user.ID < 1) // NOT ID()
+        { showNOTY("Invalid data or operation", false); return; } // Prevent blanks and duplicates
+
+        var data = {}; data["usrObj"] = user;
+        showDlg(true);
+        $.post('@Url.Action("UserKOToggleActivate", "User", new { ID = "" })', 
+            {user: ko.mapping.toJSON(user)},
+                function (response) {
+                    var msg = response.msg;
+
+                    switch (response.result)
+                    {
+                        case 2: //Success
+                            showNOTY(msg, true);
+                            break;
+                        case 1: // Referred so can't be deleted
+                            noty({
+                                text: msg,
+                                type: "warning",
+                                dismissQueue: true,
+                                timeout: 5000,
+                                layout: 'topCenter',
+                                theme: 'defaultTheme',
+                                killer: true
+                            });
+                            break;
+                        case 0: // Error
+                            showNOTY(msg, false);
+                            showDlg(false); return;
+                    }
+
+                    if(response.result > 0)
+                    {    
+                        showDlg(false);
+                        var old = ko.utils.arrayFirst(self.AllUsers(), 
+                            function (usrObj) {return usrObj.ID() == response.usr.ID; });                                             self.AllUsers.replace(old, ko.mapping.fromJS(response.usr));
+
+                            self.invokeSearch(9);
+                    }
+                }
+        );
+        //showDlg(false);
+    };
         self.cancelEdit = function (user) {
             user.Editing(false); user.Edited(false);
             if (user.ID() != null && user.ID() < 1) 
@@ -181,6 +225,8 @@ var vmUser = function(){
             var UserName = (s.UserName != null && s.UserName() != null && s.UserName() != "")?s.UserName().toLowerCase():null;
             var Email = (s.Email != null && s.Email() != null && s.Email() != "")?s.Email().toLowerCase():null;
             var RoleID = (s.RoleID != null && s.RoleID() != null && s.RoleID() != "")?s.RoleID():0;
+            var IsActive = (s.IsActive != null) ? s.IsActive(): true;
+            
             
             self.pageIndex(0);
                         
@@ -189,7 +235,8 @@ var vmUser = function(){
                     (OrgType == null || rec.OrgType().toLowerCase().indexOf(OrgType) > -1) &&
                     (UserName == null || rec.UserName().toLowerCase().indexOf(UserName) > -1) &&                    
                     (Email == null || rec.Email().toLowerCase().indexOf(Email) > -1) &&                    
-                    (RoleID < 1 || rec.RoleID() == RoleID)
+                    (RoleID < 1 || rec.RoleID() == RoleID) &&
+                    (rec.IsActive() == IsActive)
                 );
             });                        
         });
@@ -242,10 +289,11 @@ var vmUser = function(){
 
             self.pageIndex(0);  self.cachedPagesTill(0);
         }
-    };
+};
+    @* - used by old TACOnite only implementation
     var delID = -1; var isDel = false; var usrIDToDel = "";
         function doUserDelPost(txtId, txtVal) {
-            if(!isDel){@*alert("doUserDelPost:" + txtVal);*@ return true;}
+            if(!isDel){ return true;}
             else isDel = false;
             
             var data = {}; data[txtId] = txtVal;
@@ -261,4 +309,5 @@ var vmUser = function(){
         }
         var deleteSuccess = false;
         function removeUser() { deleteSuccess = true; }//doFurtherProcessing
+    *@
 </script>
