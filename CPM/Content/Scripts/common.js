@@ -358,6 +358,7 @@ function showOprResult(spanId, success) {
     //doFurtherProcessing(); HT: Handled at the end of effect call back    
     try { DisableSubmitButtons(false); /*$.unblockUI();*/ } catch (e) { }
 }
+
 function showNOTY(msg, success) {
     // Highlight, fadeOut and finally REMOVE!
     //$(spanId).effect('highlight', {}, 4000).fadeOut((success == 1) ? 1000 : 8000, function () { $(spanId).html("&nbsp;").remove(); /* show();*/ });

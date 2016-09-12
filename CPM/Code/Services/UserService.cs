@@ -14,11 +14,12 @@ namespace CPM.Services
         #region Variables
         
         public readonly vw_Users_Role_Org emptyView = 
-            new vw_Users_Role_Org() { ID = Defaults.Integer };
+            new vw_Users_Role_Org() { ID = Defaults.Integer, IsActive = true };
         public readonly Users emptyUsr = new Users() { ID = Defaults.Integer, 
             UserLocations = new EntitySet<UserLocation>() };//Make sure UserLocations is reset
         public const string sortOn = "UserName ASC", sortOn1 = "UserName ASC"; // Default for secondary sort
-                
+
+        public new const string delRefChkMsg = "The user is deactivated. But is still being referred at some places.";
         #endregion
 
         #region Login related
@@ -191,8 +192,29 @@ namespace CPM.Services
                 Email = usr.Email,
                 Password = usr.Password,
                 LastModifiedBy = usr.LastModifiedBy,
-                LastModifiedDate = DateTime.Now
+                LastModifiedDate = DateTime.Now,
+                IsActive = usr.IsActive
             };
+        }
+
+        public static vw_Users_Role_Org UpdVWfromObj(Users usr, vw_Users_Role_Org vw)
+        {
+            vw.ID = usr.ID;
+            vw.RoleID = usr.RoleID;
+            vw.OrgID = usr.OrgID;
+            vw.UserName = usr.Name;
+            vw.Email = usr.Email;
+            vw.Password = usr.Password;
+            vw.LastModifiedBy = usr.LastModifiedBy;
+            vw.LastModifiedDate = DateTime.Now;
+
+            vw.IsActive = usr.IsActive; // HT : DON'T forget!
+            vw.LastModifiedByName = usr.LastModifiedByVal;
+            vw.OrgType = ((OrgService.OrgType)vw.OrgTypeId).ToString();
+
+            vw.Edited = true; vw.Editing = false;
+
+            return vw;
         }
 
         public int AddEdit(Users userObj, string LinkedLoc, string UnlinkedLoc)
@@ -235,13 +257,22 @@ namespace CPM.Services
 
         public bool Delete(Users userObj)
         {
-            dbc.Users.DeleteOnSubmit(dbc.Users.Single(c => c.ID == userObj.ID));
+            dbc.Users.DeleteOnSubmit(dbc.Users.Single(c => c.ID == userObj.ID));            
             dbc.SubmitChanges();
-            // Following code is not working - they say 'optimistic concurrency' is not too gud in L2S
-            //dbc.users.Attach(userObj);//attach the object to be deleted
-            //dbc.users.DeleteOnSubmit(userObj);//delete the object
-            //dbc.SubmitChanges();
             return true;
+        }
+
+        public Users ToggleActive(Users userObj)
+        {
+            userObj.IsActive = !userObj.IsActive;
+            userObj.LastModifiedBy = _SessionUsr.ID; userObj.LastModifiedByVal = _SessionUsr.UserName;
+            userObj.LastModifiedDate = DateTime.Now;
+
+            dbc.Users.Attach(userObj);//attach the object as modified
+            dbc.Refresh(System.Data.Linq.RefreshMode.KeepCurrentValues, userObj);
+
+            dbc.SubmitChanges();
+            return userObj;
         }
 
         #endregion
