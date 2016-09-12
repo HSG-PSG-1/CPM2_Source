@@ -19,9 +19,6 @@ var commentsViewModel = function ()
         comment.LastModifiedDate(Date111);
         comment.PostedOn(Date111);
 
-        /*var index = self.allComments.indexOf(comment);
-        self.allComments.remove(comment);
-        self.allComments.splice(index, 0, comment);*/
     };
     self.addComment = function (comment) {
         if (comment.Comment1() == null || comment.Comment1 == "") {/*http://knockoutjs.com/documentation/event-binding.html */
@@ -41,8 +38,7 @@ var commentsViewModel = function ()
 
                 self.cancelComment(comment);//commentToAdd(cloneObservable(self.emptyCommment));
             }
-            else {
-                //HT: if observable is set correctly nothing needs to be done
+            else {//HT: if observable is set correctly nothing needs to be done
                 /*var index = self.allComments.indexOf(comment);
                 self.allComments.remove(comment);
                 self.allComments.splice(index, 0, comment);*/

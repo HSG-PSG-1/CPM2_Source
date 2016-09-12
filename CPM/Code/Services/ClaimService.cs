@@ -16,6 +16,8 @@ namespace CPM.Services
         
         public readonly vw_Claim_Master_User_Loc emptyView = new vw_Claim_Master_User_Loc() {
             ID = Defaults.Integer, ClaimDate = DateTime.Now, CustID = _SessionUsr.OrgID, CustOrg = _SessionUsr.OrgName };
+        public readonly vw_ClaimWithItemDetail emptyViewCD = new vw_ClaimWithItemDetail();      
+
         public readonly Claim emptyClaim = new Claim() { ID = Defaults.Integer, 
             aComments= new List<Comment>(), aFiles=new List<FileHeader>(), aItems  = new List<ClaimDetail>() }; // Add empty files, comments and items to ensure not null handling
 

@@ -18,10 +18,11 @@ namespace CPM.Controllers
 
         [AccessClaim("ClaimID")]
         [CacheControl(HttpCacheability.NoCache), HttpGet]
-        public ActionResult Manage(int ClaimID, bool? printClaimAfterSave)
+        public ActionResult Manage(int ClaimID, string activeTab, bool? printClaimAfterSave)
         {
             ViewData["oprSuccess"] = base.operationSuccess; //oprSuccess will be reset after this
             ViewData["printClaimAfterSave"] = (TempData["printClaimAfterSave"]??false);
+            ViewData["activeTab"] = activeTab ?? "0";
 
             #region Add mode - add new and return it in editmode
             if (ClaimID <= Defaults.Integer)
@@ -110,7 +111,7 @@ namespace CPM.Controllers
 
         [HttpPost]
         [AccessClaim("ClaimID")]
-        public ActionResult Archive(int ClaimID, string ClaimGUID, bool Archive, int ClaimNo)
+        public ActionResult Archive(int ClaimID, string ClaimGUID, bool Archive, int ClaimNo, string activeTab)
         {
             new ClaimService().Archive(ClaimID, Archive);// Delete claim
             //Log Activity (before directory del and sesion clearing)
@@ -122,7 +123,8 @@ namespace CPM.Controllers
                 _Session.ResetClaimInSessionAndEmptyTempUpload(ClaimID, ClaimGUID);//reset after act log!
             
             if (Archive) return Redirect("~/Dashboard");
-            else return RedirectToAction("Manage", new { ClaimID = ClaimID, ClaimGUID = ClaimGUID });
+            else return RedirectToAction("Manage",
+                new { ClaimID = ClaimID, ClaimGUID = ClaimGUID, activeTab = activeTab });
         }
                 
         [HttpPost]
@@ -137,7 +139,7 @@ namespace CPM.Controllers
         [AccessClaim("ClaimID")]
         public ActionResult Manage(int ClaimID, bool isAddMode,
             [FromJson]vw_Claim_Master_User_Loc claimObj, [FromJson] IEnumerable<ClaimDetail> items,
-            [FromJson] IEnumerable<Comment> comments, [FromJson] IEnumerable<FileHeader> files, bool? printClaimAfterSave)
+            [FromJson] IEnumerable<Comment> comments, [FromJson] IEnumerable<FileHeader> files, string activeTab, bool? printClaimAfterSave)
         {
             bool success = false;
             //return new JsonResult() { Data = new{ msg = "success"}};
@@ -166,8 +168,8 @@ namespace CPM.Controllers
             
             if(success)
                 TempData["printClaimAfterSave"] = printClaimAfterSave.HasValue && printClaimAfterSave.Value;
-            
-            return RedirectToAction("Manage", new { ClaimID = result });
+
+            return RedirectToAction("Manage", new { ClaimID = result, activeTab = activeTab });
         }
 
         [AccessClaim("ClaimID")]

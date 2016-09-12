@@ -23,7 +23,8 @@
                     if ( ui.tab.data( "loaded" ) ) {  event.preventDefault();  return;  } 
                     ui.jqXHR.done(function() {   ui.tab.data( "loaded", true ); });
                 },
-                activate: function(event, ui) { setFocus1(event, ui) } 
+                activate: function(event, ui) { setFocus1(event, ui) },
+                active: @ViewBag.activeTab.ToString()
             }); @*//HT: cache: true - to prevent reload on each tab select!*@
         
         @*//bind event to check claim commit*@
@@ -102,7 +103,7 @@
                         {@*START: Archive*@
                             using (Html.BeginForm("Archive", "Claim", new { ClaimID = Model.CVM.ID, ClaimGUID = Model.CVM.ClaimGUID, Archive = !Model.CVM.Archived, ClaimNo = Model.CVM.ClaimNo }, FormMethod.Post, new { @style = "display:inline" }))
                             {
-                            <input type="submit" value="@archiveVal" title="@archiveVal this claim" class="button" onclick="if(confirmDeleteM(event, 'Are you sure you want to @archiveVal this claim?'))skipCommitChk=true; else return false;" />@Html.Raw("&nbsp;")
+                            <input type="submit" value="@archiveVal" title="@archiveVal this claim" class="button" onclick="if(confirmDeleteM(event, 'Are you sure you want to @archiveVal this claim?')){skipCommitChk=true;} else return false;" />@Html.Raw("&nbsp;")
                             }
                         }@* END: Archive*@@if (!isNewClaim)
                                           { //&& !IsOnlyCustomer
@@ -282,6 +283,8 @@
 
             if (proceed) {
                 showDlg(true);
+                var activeTab = $( "#tabs" ).tabs( "option", "active" );
+
                 ko.utils.postJson(location.href, 
                 { 
                     isAddMode: @isNewClaim.ToString().ToLower(),
@@ -290,7 +293,8 @@
                     @if (!IsOnlyCustomer)
                     {<text>comments: ko.mapping.toJS(viewModelComments.allComments()),</text>}
                     files: ko.mapping.toJS(viewModelFH.allFiles()),
-                    printClaimAfterSave: printClaimAfterSave  
+                    printClaimAfterSave: printClaimAfterSave,
+                    activeTab : activeTab
                 });
                 return false;
             }

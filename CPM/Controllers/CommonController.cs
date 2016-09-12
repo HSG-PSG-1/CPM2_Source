@@ -24,7 +24,7 @@ namespace CPM.Controllers
         //[ValidateInput(false)] // SO: 2673850/validaterequest-false-doesnt-work-in-asp-net-4
         public ActionResult Login(string from, string email, string pwd, bool remember = false)
         {
-            if ((from ?? "").ToLower() == "logoff") LogOff();// Special Case: using an action named logoff creates complexity
+            if ((from ?? "").ToLower() == "logoff") LogOff();// Special Case: using an action named logoff creates complexity and loop
             
             if (remember)
                 SetCookie(new LogInModel() { Email = email, Password = Crypto.EncodeStr(pwd, false), RememberMe = remember });
@@ -221,7 +221,7 @@ namespace CPM.Controllers
             else
                 return Json(true, JsonRequestBehavior.AllowGet);//For default jQueryUI: JsonRequestBehavior.AllowGet
         }
-
+                        
         public void LogOff()
         {
             //Log Activity
@@ -260,6 +260,16 @@ namespace CPM.Controllers
         #endregion
 
         #region Misc actions
+
+        [AllowAnonymous]
+        public JsonResult KeepAlive()
+        {
+            //Session["User"] = Session["User"] + " + 1";
+            if(_Session.IsValid())
+                return Json("OK", JsonRequestBehavior.AllowGet);
+            else // OR send back taconite?
+                return Json("INVALID SESSION", JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult NoAccess()
         {
