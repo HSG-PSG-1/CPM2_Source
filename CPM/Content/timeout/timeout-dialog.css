@@ -61,6 +61,7 @@ button {
   margin-top: 7px;
   background: #EEEEEE;
   border-width: 0;
+  font-size: 13px;
 }
 .timeout-dialog  ~ .ui-widget-overlay {
   position: absolute;

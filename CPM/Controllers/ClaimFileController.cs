@@ -317,7 +317,7 @@ namespace CPM.Controllers
         }
         //Get Detail File
         [ValidateInput(false)] // SO: 2673850/validaterequest-false-doesnt-work-in-asp-net-4
-        public ActionResult GetFileD(int ClaimID)
+        public ActionResult GetFileD(int ClaimID, bool NeedPDFImage = false)
         {
             try
             {
@@ -337,14 +337,20 @@ namespace CPM.Controllers
                     filename = data[0];
                 }
                 #endregion
+                
                 int ClaimDetailID = int.Parse(data[1]);//int ClaimID = int.Parse(data[1]); 
                 string ClaimGUID = (ClaimID > 0 && data.Length < 3)? "" : data[2];//This must parse correctly (if ID > 0 means existingso no need for GUID)
 
+                if (NeedPDFImage)
+                    filename = ChkPDFImage(ClaimID, ClaimGUID, filename, ClaimDetailID);
+                
                 //Send file stream for download
                 return SendFile(ClaimID,ClaimGUID, filename, ClaimDetailID);
             }
             catch (Exception ex) { return View(); }
         }
+
+        
         // Send file stream for download
         private ActionResult SendFile(int claimID, string claimGUID, string filename, int? claimDetailId = null)
         {
@@ -352,15 +358,77 @@ namespace CPM.Controllers
             {
                 string filePath = FileIO.GetClaimFilePath(claimID, claimGUID, filename, claimDetailId, false);
 
+                bool IsImage = false, IsPDF = false, IsOther = false;
+                Defaults.GetResourceType(filename, ref IsImage, ref IsPDF, ref IsOther);
+
                 if (System.IO.File.Exists(filePath))//AppDomain.CurrentDomain.BaseDirectory 
-                    /*System.IO.Path.GetFileName(filePath)//return File("~/" + filePath, "Content-Disposition: attachment;", filename);*/
-                    return File(filePath, "Content-Disposition: attachment;", filename);
+                {
+                    if(IsImage)
+                        return File(filePath, "image/jpeg");
+                    if (IsPDF) // http://www.codeproject.com/Tips/697733/Display-PDF-within-web-browser-using-MVC
+                        return File(filePath, "application/pdf"); //"Content-Disposition: inline;", filename);
+                    else // IsOther
+                        return File(filePath, "Content-Disposition: attachment;", filename);
+                }                   
                 else/*Invalid or deleted file (from Log)*/
                 { ViewData["Message"] = "File not found"; return View("DataNotFound"); }
 
             }
             catch (Exception ex) { return View(); }
         }
+
+        #region Image Gallery Specific
+        // Image Gallery
+        [CacheControl(HttpCacheability.NoCache), HttpGet]
+        public ActionResult ViewImages(int ClaimID, int ClaimDetailID, string ClaimGUID)
+        {
+            //ViewData["ClaimDetailID"] = ClaimDetailID; 
+            LinesGallery vmGallery = new LinesGallery();
+
+            #region Create a SelectListItem array from Item list
+
+            List < ClaimDetail > items = new ClaimDetailService().GetItemsList(ClaimID);
+            vmGallery.items = new SelectListItem[items.Count];
+            int i = 0;
+            foreach (ClaimDetail line in items)
+            {
+                vmGallery.items[i++] = new SelectListItem()
+                {
+                    Text = i+ ". " + line.ItemCode + "(" + line.Description + ")",
+                    Value = line.ID.ToString(),
+                    Selected = (line.ID == ClaimDetailID)
+                };
+            }
+
+            #endregion
+
+            vmGallery.files = new FileDetailService().Search(ClaimID, ClaimDetailID);
+
+            return View(vmGallery);
+        }
+
+        private string ChkPDFImage(int claimID, string claimGUID, string filename, int? claimDetailId = null)
+        {
+            string filePath = FileIO.GetClaimFilePath(claimID, claimGUID, filename, claimDetailId, false);
+
+            if (FileIO.GenerateImageForPDF(filePath))
+                filename = filename + ".jpg"; // Append img extension if it needs pdf img
+
+            return filename;
+        }
+        //Get Detail File
+        [ValidateInput(false)] // SO: 2673850/validaterequest-false-doesnt-work-in-asp-net-4
+        public ActionResult GetPDFImageD(int ClaimID)
+        {
+            try
+            {
+                //Send file stream for download
+                return GetFileD(ClaimID, true);
+            }
+            catch (Exception ex) { return View(); }
+        }
+
+        #endregion
 
         /// <summary>
         /// Decode querystring for file download link
@@ -395,5 +463,11 @@ namespace CPM.DAL
         public FileDetail FileDetailToAdd { get; set; }
         public List<FileDetail> AllFiles { get; set; }
         public IEnumerable FileDetailTypes { get; set; }
+    }
+
+    public class LinesGallery
+    {
+        public SelectListItem[] items { get; set; }
+        public List<FileDetail> files { get; set; }
     }
 }

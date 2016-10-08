@@ -62,7 +62,7 @@ namespace CPM.Controllers
 
         [HttpPost]
         //[ValidateInput(false)] // SO: 2673850/validaterequest-false-doesnt-work-in-asp-net-4
-        public ActionResult Login(LogInModel model, string ReturnUrl, bool? IsForgotPassword, string UserEmail)
+        public ActionResult Login(LogInModel model, string ReturnUrl, bool? IsForgotPassword, string UserEmail, string next)
         {
             if (IsForgotPassword.HasValue && IsForgotPassword.Value)
                 return SendPassword(UserEmail, model);//SPECIAL CASE PROCESSING for Forgot password
@@ -89,6 +89,7 @@ namespace CPM.Controllers
                     new ActivityLogService(ActivityLogService.Activity.Login).Add();
 
                     //Redirect to return url - if its valid
+                    ReturnUrl = next ?? ReturnUrl;
                     if (RedirectFromLogin(ref ReturnUrl))
                         return Redirect(ReturnUrl);
                     else//Go to the default url -  Dashboard?from=login
@@ -131,6 +132,14 @@ namespace CPM.Controllers
 
             LogOff();// To make sure no session is set until Login (or it'll go in Login HttpGet instead of Post)
             return View(model);
+        }
+
+        [AllowAnonymous]
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
+        public ActionResult Logout(string next="logout")
+        {
+            LogOff();
+            return RedirectToAction("Login");
         }
 
         #endregion

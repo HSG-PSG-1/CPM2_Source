@@ -31,7 +31,7 @@ namespace CPM.Services
 
             #region Well, we've to fetch it all because for Async mode we'll need ALL Items
             //HT: IMP: Finally got to convert Unknown type to strong type !
-            //http://stackoverflow.com/questions/1458737/linq2sql-explicit-construction-of-entity-type-some-type-in-query-is-not-allo
+            //SO : 1458737/linq2sql-explicit-construction-of-entity-type-some-type-in-query-is-not-allo
             IEnumerable<ClaimDetail> cd = cQuery.AsEnumerable().Select(c => new ClaimDetail
                 {
                     ID = c.ID,
@@ -86,8 +86,36 @@ namespace CPM.Services
             return c.Set(c1 => { c1.ItemCode = ItemCode; c1.Defect = Defect; });
         }
 
-        #endregion
+        public List<ClaimDetail> GetItemsList(int claimID)
+        {
+            var cQuery = from c in dbc.vw_ClaimDetail_Item_Defects
+                         where c.ClaimID == claimID
+                         orderby c.ID // Don't use ItemNumber because it might scramble the sequence
+                         select c;
+
+            #region Well, we've to fetch it all because for Async mode we'll need ALL Items
+            //HT: IMP: Finally got to convert Unknown type to strong type !
+            //SO : 1458737/linq2sql-explicit-construction-of-entity-type-some-type-in-query-is-not-allo
+            IEnumerable<ClaimDetail> cd = cQuery.AsEnumerable().Select(c => new ClaimDetail
+            {
+                ID = c.ID,
+                ClaimID = c.ClaimID,
+                ItemID = c.ItemID,
+                Type = c.Type,
+                Description = c.Description,
                 
+                ItemCode = c.ItemCode,
+                Defect = c.Defect,
+                LastModifiedBy = c.LastModifiedBy,
+                LastModifiedDate = c.LastModifiedDate
+            });
+            #endregion
+
+            return cd.ToList();
+        }
+
+        #endregion
+
         #region Add / Edit / Delete & Bulk
 
         public int Add(ClaimDetail detailObj, bool doSubmit)

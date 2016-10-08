@@ -165,7 +165,8 @@ var filesHeaderModel = function () {
     self.allFiles = ko.observableArray(); // Initial items
 
     self.TriggerOpenWin = function (fileFH) {
-        openWin(FileGetURL + fileFH.CodeStr(), 1, 1);
+        var lightbox = lity(FileGetURL + fileFH.CodeStr());
+        //openWin(FileGetURL + fileFH.CodeStr(), 1, 1);
     }
 
     self.setEdited = function (file) {

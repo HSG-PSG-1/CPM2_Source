@@ -100,8 +100,8 @@ namespace CPM.Helper
             string Subject = template.Subject.Replace("[CLAIM#]", ClaimNo);
             System.Text.StringBuilder Body = new System.Text.StringBuilder(template.Body);
             //set contents
-            string claimLink = //FromComment ? Defaults.trimLastURLSegment(HttpContext.Current.Request.Url.ToString()) : HttpContext.Current.Request.Url.ToString();
-            HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) +
+            //FromComment ? Defaults.trimLastURLSegment(HttpContext.Current.Request.Url.ToString()) : HttpContext.Current.Request.Url.ToString();
+            string claimLink = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) +
             new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext).Action("Manage", "Claim", new { ClaimID = ClaimId });
             
             claimLink = System.Web.HttpUtility.UrlDecode(claimLink);//.TrimEnd(new char[] { '?' });//Need to add Manage? so that mvc doesn't remove default action, now trim it.

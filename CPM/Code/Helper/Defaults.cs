@@ -174,6 +174,7 @@ namespace CPM.Helper
         #endregion
 
         #region Format, Grouping, Misc
+        
         const string noRecords = "<tr><td colspan=\"{0}\" align=\"center\"> No records found </td></tr>";
         public const string chkCollapse = "return chkCollapse(this);"; // Make sure a table = tblSearch exists and its collapsible
 
@@ -312,6 +313,16 @@ namespace CPM.Helper
         {
             Uri url = new Uri(uri);
             return url.Scheme + Uri.SchemeDelimiter + url.Host + (url.IsDefaultPort ? "" : (":" + url.Port));                       
+        }
+
+        public static void GetResourceType(string filename, ref bool IsIMG, ref bool IsPDF, ref bool IsOther)
+        {
+            string[] imgExts = new string[] { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff" };
+
+            IsPDF = filename.ToLower().EndsWith(".pdf");
+            IsIMG = !IsPDF && !string.IsNullOrEmpty(
+                imgExts.Where(s => filename.ToLower().EndsWith(s)).FirstOrDefault());
+            IsOther = !IsPDF && !IsIMG;
         }
 
         #endregion

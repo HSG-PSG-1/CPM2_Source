@@ -16,7 +16,7 @@
                 if (reset)//Reset the id & txtbox
                 { $(txtBox).val('').trigger("change"); $(idBox).val('').trigger("change"); }
 
-                @*//renderAutoComplete('@Defaults.commonRoot/Lookup?id=Item', '#ItemID', '#ItemCode');*@                
+                @*//renderAutoComplete('@Defaults.commonRoot/Lookup?id=Item', '#ItemID', '#ItemCode');*@
                 $(txtBox).autocomplete({
                     source: url //'@Defaults.commonRoot/Lookup?id=Item1',
                     , minLength: autoCompMinLen
@@ -52,7 +52,7 @@
             $("#CurrentPrice").val(item ? parseFloat(item.cp) : 0.00).trigger("change").effect('highlight', {}, 2000);
             //$("#data").html(ui.item.descr);//$( "#project-icon" ).attr( "src", "images/" + ui.item.icon );//return false;
             autoCalc(null); //Auto calculate after new values being populated
-            //What about Size   Ply Type?                        
+            //What about Size   Ply Type?
         }
 
         function checkReq(ctrl, impactCtrl) {
@@ -66,7 +66,7 @@
             }
         }
 
-        function autoCalc(txt) {            
+        function autoCalc(txt) {
             if (txt != null) {
                 txt = $(txt); txt.val(txt.val().Ufloat()).trigger("change");
             }
@@ -90,16 +90,16 @@
             $("#CreditAmt1").val(parseFloat(CreditAmt).toFixed(2)).trigger("change").effect('highlight', {}, 2000);
             $("#InvoiceAmt1").val(parseFloat(InvoiceAmt).toFixed(2)).trigger("change").effect('highlight', {}, 2000);
         }
-    </script>
+</script>
 <script src="@Url.Content("~/Content/Scripts/jquery.numeric.js")" type="text/javascript"></script>
-    <div id="divItems">
-        @*<div style="text-align: right"><input type="button" data-bind="click:saveToServer" class="button" value="Submit to Server" /></div>*@
-        <table style="width: 100%" border="0">
-            @*Add \ Edit Item : START*@
-            <tr data-bind1="visible:!showGrid()">
-                <td>
+<div id="divItems">
+    @*<div style="text-align: right"><input type="button" data-bind="click:saveToServer" class="button" value="Submit to Server" /></div>*@
+    <table style="width: 100%" border="0">
+        @*Add \ Edit Item : START*@
+        <tr data-bind1="visible:!showGrid()">
+            <td>
                 <div id="itmEntryDailog">
-                    <table cellpadding="2" cellspacing="2" border="0" data-bind="with: itemToAdd">                        
+                    <table cellpadding="2" cellspacing="2" border="0" data-bind="with: itemToAdd">
                         <tr>
                             <td valign="top" style1="border: 1px solid grey" colspan="2">
                                 <div style="display: none">
@@ -117,10 +117,9 @@
                                                     <td align="right" nowrap="nowrap">
                                                         Item Code
                                                     </td>
-                                                    <td align="left" nowrap="nowrap" colspan="2">                                                        
-                                                        <input id="ItemCode" type="text" data-bind="value:ItemCode"/>
-                                                        &nbsp;@Html.Raw(string.Format(Defaults.lookupImgBtn, "ItemCode"))&nbsp; <input
-                                                            id="ItemID" data-bind="value:ItemID" type="hidden" />
+                                                    <td align="left" nowrap="nowrap" colspan="2">
+                                                        <input id="ItemCode" type="text" data-bind="value:ItemCode" />
+                                                        &nbsp;@Html.Raw(string.Format(Defaults.lookupImgBtn, "ItemCode"))&nbsp; <input id="ItemID" data-bind="value:ItemID" type="hidden" />
                                                     </td>
                                                     <td>
                                                         &nbsp;
@@ -132,7 +131,7 @@
                                                     </td>
                                                     <td colspan="3" nowrap="nowrap">
                                                         <textarea data-bind="value:Description" cols="20" id="Description" maxlength="250"
-                                                            name="Description" onblur="return trimTextAreaMaxLen(this);" rows="2" style="width: 97%"></textarea>
+                                                                  name="Description" onblur="return trimTextAreaMaxLen(this);" rows="2" style="width: 97%"></textarea>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -141,8 +140,7 @@
                                                     </td>
                                                     <td colspan="3">
                                                         <select id="ddlDefect" class="dropbox" data-bind="options: $parent.Defects, value:NatureOfDefect, optionsText: 'value', optionsValue:'id'"
-                                                            onchange="setDDLtext(this, 'defectText');">
-                                                        </select>
+                                                                onchange="setDDLtext(this, 'defectText');"></select>
                                                         <input id="defectText" type="hidden" data-bind="value:Defect" />
                                                     </td>
                                                 </tr>
@@ -161,14 +159,10 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td align="right">
-                                                    </td>
-                                                    <td>
-                                                    </td>
-                                                    <td>
-                                                    </td>
-                                                    <td>
-                                                    </td>
+                                                    <td align="right"></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
                                                 </tr>
                                                 <tr>
                                                     <td align="right" nowrap="nowrap" valign="top">
@@ -185,14 +179,10 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td align="right">
-                                                    </td>
-                                                    <td>
-                                                    </td>
-                                                    <td>
-                                                    </td>
-                                                    <td>
-                                                    </td>
+                                                    <td align="right"></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
                                                 </tr>
                                                 <tr @Html.Raw(showToInternal)>
                                                     <td align="right" nowrap="nowrap" valign="top">
@@ -214,25 +204,21 @@
                                                     </td>
                                                     <td>
                                                         <input id="CreditAmt1" name="CreditAmt1" readonly="readonly" style="border: none;"
-                                                            type="text" data-bind="value:CreditAmt1" />
+                                                               type="text" data-bind="value:CreditAmt1" />
                                                     </td>
                                                     <td align="right" nowrap="nowrap" @Html.Raw(showToInternal)>
                                                         Invoice Amount
                                                     </td>
                                                     <td @Html.Raw(showToInternal)>
                                                         <input id="InvoiceAmt1" name="InvoiceAmt1" readonly="readonly" style="border: none;"
-                                                            type="text" data-bind="value:InvoiceAmt1" />
+                                                               type="text" data-bind="value:InvoiceAmt1" />
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td align="right">
-                                                    </td>
-                                                    <td>
-                                                    </td>
-                                                    <td>
-                                                    </td>
-                                                    <td>
-                                                    </td>
+                                                    <td align="right"></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
                                                 </tr>
                                                 <tr>
                                                     <td align="right">
@@ -243,7 +229,7 @@
                                                         {<span data-bind="text:(Note=='')?Note:'(empty)'"></span>}
                                                         else
                                                         {<textarea data-bind="value:Note" cols="50" maxlength="250" onblur="return trimTextAreaMaxLen(this);"
-                                                            rows="2" style="width: 99%"></textarea>
+                                                                   rows="2" style="width: 99%"></textarea>
                                                         }
                                                     </td>
                                                 </tr>
@@ -257,8 +243,8 @@
                                                                 <td class="small">
                                                                     <div data-bind="if:ID == 0">save to enable file upload</div>
                                                                     <div data-bind="if:ID != 0">
-                                                                    <div class="dDialog uline" data-bind="click:$parent.openAttachFilesDetail">Attach a file </div>                                                                    
-                                                                    </div>                                                                    
+                                                                        <div class="dDialog uline" data-bind="click:$parent.openAttachFilesDetail">Attach a file </div>
+                                                                    </div>
                                                                 </td>
                                                                 <td>
                                                                     ]
@@ -274,145 +260,150 @@
                                 @* =========== =========== =========== =========== =========== *@
                             </td>
                         </tr>
-                        <tr>                        
+                        <tr>
                             <td align="center">
                                 <input type="button" data-bind="click:$parent.saveItem" value="Save" class="button" />
                                 <input id="btnReset" data-bind="click:$parent.cancelItem, visible:_Added && ! _Edited" type="reset" value="Cancel"
-                                    class="button" />
+                                       class="button" />
                             </td>
                         </tr>
                     </table>
                 </div>
-                </td>
-            </tr>
-            @*Add \ Edit Item : END*@
-            <tr data-bind1="visible:showGrid">
-                <td align="right">
+            </td>
+        </tr>
+        @*Add \ Edit Item : END*@
+        <tr data-bind1="visible:showGrid">
+            <td align="right">
                 <div style=" padding-bottom:3px">
                     <div class="dDialog uline" style="text-align: right; width: 5%;"
-                        data-bind="click:showAddNew">
+                         data-bind="click:showAddNew" tabindex="0" id="itmAddNew">
                         Add New
-                    </div></div>
-                    @* Items : START *@
-                    <table class="thinBorder" width="99%" id="tblItems">
-                        <thead class="header">
-                            <tr>
-                                <th align="left" nowrap="nowrap" style="display:none;width:3%">
-                                    id &nbsp;&nbsp; A &nbsp;&nbsp; E &nbsp;&nbsp; D
-                                </th>
-                                <th width="1%">
-                                </th>
-                                <th width="2%">
-                                    #
-                                </th>
-                                <th nowrap="nowrap">
-                                    Item
-                                </th>
-                                <th nowrap="nowrap">
-                                    Description
-                                </th>
-                                <th>
-                                    Defect
-                                </th>
+                    </div>
+                </div>
+                @* Items : START *@
+                <table class="thinBorder" width="99%" id="tblItems">
+                    <thead class="header">
+                        <tr>
+                            <th align="left" nowrap="nowrap" style="display:none;width:3%">
+                                id &nbsp;&nbsp; A &nbsp;&nbsp; E &nbsp;&nbsp; D
+                            </th>
+                            <th width="1%">
+                            </th>
+                            <th width="2%">
+                                #
+                            </th>
+                            <th nowrap="nowrap">
+                                Item
+                            </th>
+                            <th nowrap="nowrap">
+                                Description
+                            </th>
+                            <th>
+                                Defect
+                            </th>
+                            <th nowrap="nowrap" width="5%">
+                                Credit Amt
+                            </th>
+                            @if (!_Session.IsOnlyCustomer)
+                                {
                                 <th nowrap="nowrap" width="5%">
-                                    Credit Amt
-                                </th>
-                                @if (!_Session.IsOnlyCustomer)
-                                { <th nowrap="nowrap" width="5%">
                                     Invoice Amt
                                 </th>}
-                                     <th></th>
-                            </tr>
-                        </thead>
-                        <tbody data-bind="foreach: allItems()">
-                            <tr data-bind="css:{deletedTR:_Deleted()}" style="height: 25px">
-                                <td nowrap="nowrap" style="display:none;width:1%">
-                                    <span data-bind='text:ID'></span>
-                                    <input type="checkbox" data-bind="checked:_Added" />
-                                    <input type="checkbox" data-bind="checked:_Edited" />
-                                    <input type="checkbox" data-bind="checked:_Deleted" />
-                                </td>
-                                <td nowrap="nowrap" width="3%">
-                                    <div class="dDialog" data-bind="visible:!_Deleted(), click:$parent.setEdited">@Html.Raw(@Defaults.editImg)</div>
-                                    &nbsp;
-                                    <div class="dDialog" data-bind="visible:!_Deleted(), click:$parent.removeSelected">@Html.Raw(@Defaults.delImgForObj("item"))</div>
-                                    &nbsp;
-                                    <div class="dDialog" data-bind="visible:_Deleted(), click:$parent.unRemoveSelected">@Html.Raw(@Defaults.cancelImgOnly) &nbsp; &nbsp; </div>
-                                    @*@Html.Raw(Defaults.delPOSTImgTACO("ItemID", -1, "doCmtDelPost"))*@
-                                </td>
-                                <td align="center" data-bind="text:$index()+1" width="1%">
-                                </td>
-                                <td data-bind="text:ItemCode" width="3%">
-                                </td>
-                                <td width="40%" title="click to edit">
-                                    <input class="editableTX" data-bind="value:Description, event:{change:$parent.setEditedFlag}"
-                                        type="text" onblur="trimTextAreaMaxLen(this)" maxlength="250" />                                         
-                                </td>
-                                <td nowrap="nowrap" width="45%" title="click to edit">
-                                    <div style="overflow: hidden">
-                                        <select class="editableTX" data-bind="options: $parent.Defects, value:NatureOfDefect,
-                                         optionsText: 'value', optionsValue:'id', event:{change:$parent.setEditedFlag}">
-                                        </select>
-                                    </div>
-                                    @*<span data-bind="text:Defect" onmouseover="toggleLabel(this.parentElement);"></span>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: allItems()">
+                        <tr data-bind="css:{deletedTR:_Deleted()}" style="height: 25px">
+                            <td nowrap="nowrap" style="display:none;width:1%">
+                                <span data-bind='text:ID'></span>
+                                <input type="checkbox" data-bind="checked:_Added" />
+                                <input type="checkbox" data-bind="checked:_Edited" />
+                                <input type="checkbox" data-bind="checked:_Deleted" />
+                            </td>
+                            <td nowrap="nowrap" width="3%">
+                                <div class="dDialog" data-bind="visible:!_Deleted(), click:$parent.setEdited">@Html.Raw(@Defaults.editImg)</div>
+                                &nbsp;
+                                <div class="dDialog" data-bind="visible:!_Deleted(), click:$parent.removeSelected">@Html.Raw(@Defaults.delImgForObj("item"))</div>
+                                &nbsp;
+                                <div class="dDialog" data-bind="visible:_Deleted(), click:$parent.unRemoveSelected">@Html.Raw(@Defaults.cancelImgOnly) &nbsp; &nbsp; </div>
+                                @*@Html.Raw(Defaults.delPOSTImgTACO("ItemID", -1, "doCmtDelPost"))*@
+                            </td>
+                            <td align="center" data-bind="text:$index()+1" width="1%"></td>
+                            <td data-bind="text:ItemCode" width="3%"></td>
+                            <td width="40%" title="click to edit">
+                                <input class="editableTX" data-bind="value:Description, event:{change:$parent.setEditedFlag}"
+                                       type="text" onblur="trimTextAreaMaxLen(this)" maxlength="250" />
+                            </td>
+                            <td nowrap="nowrap" width="45%" title="click to edit">
+                                <div style="overflow: hidden">
+                                    <select class="editableTX" data-bind="options: $parent.Defects, value:NatureOfDefect,
+                                         optionsText: 'value', optionsValue:'id', event:{change:$parent.setEditedFlag}"></select>
+                                </div>
+                                @*<span data-bind="text:Defect" onmouseover="toggleLabel(this.parentElement);"></span>
                                     <select class="dropbox" style="display: none; width: 98%" onfocus="doTDHover = false;"
                                         onblur="doTDHover = true; toggleLabel(this.parentElement);" data-bind="options: $parent.Defects, value:NatureOfDefect,
                                          optionsText: 'value', optionsValue:'id', event:{change:$parent.setEditedFlag}"
                                         onmouseout="toggleLabel(this.parentElement);">
                                     </select>*@
-                                </td>
-                                <td data-bind="text:CreditAmt1" align="right">
-                                </td>
-                                @if (!_Session.IsOnlyCustomer)
-                                { <td data-bind="text:InvoiceAmt1" align="right">
-                                </td> }
-                                <td>
-                                    <div class="dDialog uline small" data-bind="visible: !_Deleted(), click:$parent.openAttachFilesDetailDirect">Files</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="5" align="right">
-                                    Total:
-                                </td>
-                                <td data-bind="text:CreditAmtTotal" align="right">
-                                </td>
-                                @if (!_Session.IsOnlyCustomer)
-                                { <td data-bind="text:InvoiceAmtTotal" align="right">
-                                </td>   }
-                                <td></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    @* Items : END *@
-                </td>
-            </tr>
-        </table>
-    </div>
+                            </td>
+                            <td data-bind="text:CreditAmt1" align="right"></td>
+                            @if (!_Session.IsOnlyCustomer)
+                            {
+                                <td data-bind="text:InvoiceAmt1" align="right"></td> }
+                            <td>
+                                <div class="dDialog uline small" data-bind="visible: !_Deleted(), click:$parent.openAttachFilesDetailDirect">Files</div>
+                            </td>
+                            <td>
+                                <div class="dDialog uline small" data-bind="visible: !_Deleted(), click:$parent.openFilesGallery">
+                                    <img src="@Url.Content("~/Content/Images/gallery.png")" alt="Files Gallery" title="Files Gallery" />
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" align="right">
+                                Total:
+                            </td>
+                            <td data-bind="text:CreditAmtTotal" align="right"></td>
+                            @if (!_Session.IsOnlyCustomer)
+                                {
+                                <td data-bind="text:InvoiceAmtTotal" align="right"></td>   }
+                            <td colspan="2"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                @* Items : END *@
+            </td>
+        </tr>
+    </table>
+</div>
 @*{ Html.RenderPartial("KO/ItemsKOscript"); }*@
 <script type="text/javascript">
     var autoCompMinLen = 2;
     var txtBox = "#ItemCode", idBox = "#ItemID";
-    
+
     function doBrandsFillAndNumericTXT() {
         try {
             setFocus("ItemCode");
+            $("#itmAddNew").focus();
+
             fillItemsForBrand(null, false);@*BrandID - this might be obsolete now that we've the -show add only when brand with items is selected*@
-        
+
         @* // Ensure numeric (make sure jquery.numeric.js is included) - doesn't work with IE10
            // $("#TDRemaining").numeric();
            // $("#TDOriginal").numeric();
            // $("#CurrentPrice").numeric();
            // $("#CurrentCost").numeric(); *@
         } catch (err) { alert(err.message); }
-    }    
+    }
 
     function callDocReadyComments(){
         createItemsKO();
         @*doBrandsFillAndNumericTXT(); - need to be done on each edit / add due to KO overridding bindings*@
     }
-    
+
     function brandHasItems()
     {
         return ($("#BrandID option:selected").text().indexOf("(0)") == -1);

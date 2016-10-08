@@ -16,7 +16,7 @@
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                             </td>
                             <td align="left" nowrap="nowrap">
-                                <div id="divMultiFileUpload" style="display:none">
+                                <div id="divMultiFileUpload" style1="display:none">
                                     <input type="file" name="multiFileupload" id="multiFileupload" style="display: inline; text-align: right" multiple="true" />
                                     <div id="uploaded" style1="display: inline; text-align: right">
                                     </div>
@@ -299,7 +299,7 @@
                      {"ASPSESSID": "@ASPSESSID", "AUTHID": "@auth", "FileHdrObj" : fileAddedLatest });
                 },
                  'onUploadError' : function(file, errorCode, errorMsg, errorString) {
-                    showNOTY('The file ' + file.name + ' could not be uploaded (size limit 33mb): ' + errorString, false);                    
+                     showNOTY('The file ' + file.name + ' could not be uploaded (size limit ' + maxFileSize + '): ' + errorString, false);                    
                     popFileEntry();
                 },
                 'onUploadSuccess' : function(file, dataAll, response) {                     
