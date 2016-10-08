@@ -51,6 +51,11 @@
                              ClaimDetailID = -999,
                              ClaimGUID = Model.CVM.ClaimGUID
                          }))';
+        var FilesGalleryURL = '@Html.Raw(Url.Action("ViewImages", "Claim", new
+                        {
+                            ClaimDetailID = -999,
+                            ClaimGUID = Model.CVM.ClaimGUID
+                        }))';
         var commentsEmailURL = '@Url.Action("CommentsKOEmail", "Claim", new { ClaimGUID = Model.CVM.ClaimGUID })';
         var commentDeleteURL = '@Url.Action("CommentKODelete", "Claim", new { ClaimGUID = Model.CVM.ClaimGUID })';
         var FileGetURL = '@Url.Action("GetFile", "Claim")?';
@@ -70,6 +75,7 @@
     @*<script type="text/javascript" src="@Url.Content("~/Content/uploadify/jquery.uploadify.js")"></script>*@
     <script type="text/javascript" src="@Url.Content("~/Content/uploadify/jquery.uploadify.min.js")"></script>
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/uploadify/uploadify.css")" />
+    <link href="@Url.Content("~/Content/Lity/lity.v2.0.css")" rel="stylesheet" />
 }
 @{ bool isNewClaim = (Model.CVM.ID <= Defaults.Integer);//StatusIDold
    string cancelorDelete = isNewClaim ? "Cancel" : "Delete";
@@ -265,9 +271,10 @@
     </tr>
 </table>
 <div id="taco_niteDIV1" name="taco_niteDIV1" style1="display:none">&nbsp;</div>
+<script src="@Url.Content("~/Content/Lity/lity.v2.0.js")"></script>
+<script src="@Url.Content("~/Content/Scripts/KOVM/CommentsFilesKOscript.js")"></script>
+<script src="@Url.Content("~/Content/Scripts/KOVM/ItemsKOscriptOLD.js")"></script>
 
-<script src="@Url.Content("~/Content/Scripts/KOVM/CommentsFilesKOscript.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Content/Scripts/KOVM/ItemsKOscriptOLD.js")" type="text/javascript"></script>
 <script type="text/javascript">
     var claimViewModel = function () 
     {
@@ -320,7 +327,7 @@
             createItemsKO(CEVM.ClaimDetail);
             @if (!IsOnlyCustomer)
             { <text>  createCommentsKO(CEVM.Comment, CEVM.Comment.AssignTo); </text> }
-            createFilesHeaderKO(CEVM.File);
+            createFilesHeaderKO(CEVM.File); doUploadifyForMultiFile();
         }            
     }
 
@@ -372,7 +379,8 @@
                 setFocus("StatusID"); break;
             case 2: //Items                
                 if(!itmsTableNavDone) { $("#tblItems").tableNav(); itmsTableNavDone = true; }
-                setFocus("ItemCode");
+                $("#itmAddNew").focus();
+                //setFocus("ItemCode");
                 break; // Done in the cshtml (partial)
             case 3: //Comments
                 @if (IsOnlyCustomer)
@@ -381,7 +389,7 @@
                 { @Html.Raw("if(!cmtsTableNavDone) { $('#tblComments').tableNav(); cmtsTableNavDone = true; }; setFocus(\"Comment1\");") }  break;
             case 4: //Files                
                 if(!filsTableNavDone) { $("#tblFilesH").tableNav(); filsTableNavDone = true; };
-                setFocus("FileType"); doUploadifyForMultiFile();
+                setFocus("FileType");
                 break;
         }
     }
@@ -411,11 +419,12 @@
         //e.stopPropagation works in Firefox.        
         if (e.stopPropagation) {e.stopPropagation();e.preventDefault();}        
     }
-    // A jQuery event , which is triggered after "onbeforeunload" 
-    $(window).on('beforeunload', function(){ // SO : 18783535            
+    // A jQuery event , which is triggered only when page has started unloading (not beforeunload)
+    $(window).on('unload', function(){ // http://www.mkyong.com/jquery/how-to-stop-a-page-from-exit-or-unload-with-jquery/
             // trigger the final cleanup 
-            if (skipCommitChk) { skipCommitChk = false; return; }
-            $.post('@Url.Action("CleanupTempUpload")', { ClaimGUID : '@Model.CVM.ClaimGUID'});            
+        if (skipCommitChk) { return; } // skipCommitChk = false;
+        $.post('@Url.Action("CleanupTempUpload")', { ClaimGUID : '@Model.CVM.ClaimGUID'});
+        //Cleanup newly added files in Item entry ?
             return true;
     });
 

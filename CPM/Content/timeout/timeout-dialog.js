@@ -49,7 +49,7 @@ String.prototype.format = function() {
       timeout: 1200,
       countdown: 60,
       title : 'Your session is about to expire!',
-      message : 'You will be logged out in {0} seconds.',
+      message : 'You will be logged out in {0} minute(s).',
       question: 'Do you want to stay signed in?',
       keep_alive_button_text: 'Yes, Keep me signed in',
       sign_out_button_text: 'No, Sign me out',
@@ -131,12 +131,14 @@ String.prototype.format = function() {
 
         originalTitle = document.title;
         this.countdown = window.setInterval(function () {
-          counter -= 1;
-          $("#timeout-countdown").html(counter);
+            counter -= 1;
+            $("#timeout-countdown").html((counter / 60).toFixed(2)); // SO : 15762768
+            // For seconds $("#timeout-countdown").html(counter);
 
           // Blink title
-          if (counter % 2 == 0)
-              document.title = counter + " seconds to session expiration";
+            if (counter % 2 == 0)
+                document.title = (counter / 60).toFixed(2) + " minute(s) to session expiration";
+              //document.title = counter + " seconds to session expiration";
           else
               document.title = " ! ";
 

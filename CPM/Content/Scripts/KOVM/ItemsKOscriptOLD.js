@@ -57,14 +57,19 @@ var itemsModel = function () {
 
     self.openAttachFilesDetail = function (item) {
         var url = FilesDetailURL.replace("-999", item.ID()); /*"@Url.Action("FilesDetail", "Claim")" + "?ClaimDetailID=" + item.ID() + "&ClaimGUID=@ViewData["ClaimGUID"]"; */        
-        var winFD = openWin(url, 450, 650);
+        var winFD = openWinScrollable(url, 550, 750);
         //winFD.onunload = 
     }
 
     self.openAttachFilesDetailDirect = function (item) {
         var url = FilesDetailURL.replace("-999", item.ID());
-        var winFD = openWin(url, 450, 650);
+        var winFD = openWin(url, 550, 750);
         self.itemToAdd(item);
+    }
+
+    self.openFilesGallery = function (item) {
+        var url = FilesGalleryURL.replace("-999", item.ID());
+        var winGL = openWin(url, 550, 750);        
     }
 
     self.showAddNew = function () {

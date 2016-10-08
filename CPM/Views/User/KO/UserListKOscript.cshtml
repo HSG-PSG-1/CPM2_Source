@@ -2,12 +2,6 @@
 @using CPM.Helper
 <script type="text/javascript">
 var loading = '<div style="text-align:center;display:block;"><img src=" @Url.Content("~/Content/Images/loading.gif")" title="" alt="Loading" /></div>';
-       
-function gotoUser(ClaimId)
-{
-    window.location.href = 
-    "@HttpUtility.UrlDecode(Url.Action("Manage?", "Claim", new { ClaimId = -99 }))".replace('-99',ClaimId);
-}
 
 @* KO based pagination *@
 function updatePagedRows(vm)

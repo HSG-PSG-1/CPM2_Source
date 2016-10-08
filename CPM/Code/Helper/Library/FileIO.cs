@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
-using System.Web.UI.WebControls;
 using System.IO;
+using Spire.Pdf;
 
 namespace CPM.Helper
 {
@@ -190,6 +189,13 @@ namespace CPM.Helper
                 if (File.Exists(FilePath))
                     File.Delete(FilePath);
 
+                #region Special case for .pdf.img files
+                
+                if (fileName.ToLower().EndsWith(".pdf") && File.Exists(FilePath+".jpg"))
+                    File.Delete(FilePath + ".jpg");
+
+                #endregion
+
                 return true; // HT: If file doesn't exist - we need not worry to delete it!
 
             }
@@ -234,9 +240,33 @@ namespace CPM.Helper
             if (Directory.Exists(sourcePath))
             {
                 foreach (FileInfo fi in GetFiles(sourcePath, ClaimGUID))
-                    fi.MoveTo(Path.Combine(sourcePath, fi.Name.Replace(ClaimGUID + fileNameSep, "")));
+                {
+                    string savePath = Path.Combine(sourcePath, fi.Name.Replace(ClaimGUID + fileNameSep, ""));
+                    fi.MoveTo(savePath);
+
+                    // HT : Approach changed so not needed (kept for ref)
+                    //Special case to generate .pdf.jpg image file
+                    //if (savePath.ToLower().EndsWith(".pdf"))
+                    //    GenerateImageForPDF(savePath);
+                }
             }
         }
+
+        /// <summary>
+        /// http://www.c-sharpcorner.com/UploadFile/a0927b/create-pdf-document-and-convert-to-image-programmatically/
+        /// </summary>
+        /// <param name="savePath"></param>
+        public static bool GenerateImageForPDF(string savePath)
+        {
+            if (File.Exists(savePath) && !File.Exists(savePath + ".jpg"))
+            {
+                PdfDocument pdfdoc = new PdfDocument();
+                pdfdoc.LoadFromFile(savePath, FileFormat.PDF);
+                pdfdoc.SaveAsImage(0).Save(savePath + ".jpg");
+            }
+            return true;
+        }
+
         public static void CleanTempUpload(int ClaimID, string ClaimGUID)
         {
             string sourcePath = GetClaimFilesDirectory(ClaimID, ClaimGUID);
